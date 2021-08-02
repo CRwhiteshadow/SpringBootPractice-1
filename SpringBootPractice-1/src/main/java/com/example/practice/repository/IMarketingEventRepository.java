@@ -11,7 +11,7 @@ import com.example.practice.model.MarketingEventBean;
 
 @Repository("marketingEventDAO")
 @Transactional
-public interface IMarketingEventRepository extends JpaRepository<MarketingEventBean, Integer> {
+public interface IMarketingEventRepository extends JpaRepository<MarketingEventBean, Long> {
 	@Query("select m from MarketingEventBean m where m.meventname like %?1%")
 	public List<MarketingEventBean> findByMeventnameContaining(String meventname);
 	

@@ -20,7 +20,7 @@ public class MarketingEventRestController {
 	private IMarketingEventService marketingEventService;
 	
 	@GetMapping(value="/find/{id}",produces=MimeTypeUtils.APPLICATION_JSON_VALUE)
-	public ResponseEntity<MarketingEventBean> find(@PathVariable("id") Integer id){
+	public ResponseEntity<MarketingEventBean> find(@PathVariable("id") Long id){
 		try {
 			return new ResponseEntity<MarketingEventBean>(marketingEventService.findById(id),HttpStatus.OK);
 		} catch (Exception e) {

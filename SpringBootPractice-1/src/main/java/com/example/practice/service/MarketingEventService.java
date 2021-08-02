@@ -28,7 +28,7 @@ public class MarketingEventService implements IMarketingEventService {
 	}
 
 	@Override
-	public MarketingEventBean findById(Integer meventid) {
+	public MarketingEventBean findById(Long meventid) {
 		return marketingEventDAO.getById(meventid);
 	}
 
@@ -44,7 +44,7 @@ public class MarketingEventService implements IMarketingEventService {
 	}
 
 	@Override
-	public void deleteById(Integer meventid) {
+	public void deleteById(Long meventid) {
 		marketingEventDAO.deleteById(meventid);
 		
 	}
@@ -55,7 +55,7 @@ public class MarketingEventService implements IMarketingEventService {
 	}
 
 	@Override
-	public void deleteAllById(List<Integer> meventids) {
+	public void deleteAllById(List<Long> meventids) {
 		marketingEventDAO.deleteAllById(meventids);
 		
 	}

@@ -8,11 +8,11 @@ public interface IMarketingEventService {
 	
 	public List<MarketingEventBean> findAll();
 	public List<MarketingEventBean> findByMeventnameContaining(String meventname);
-	public MarketingEventBean findById(Integer meventid);
+	public MarketingEventBean findById(Long meventid);
 	public MarketingEventBean save(MarketingEventBean bean);
 	public void delete(MarketingEventBean bean);
-	public void deleteById(Integer meventid);
-	public void deleteAllById(List<Integer> meventids);
+	public void deleteById(Long meventid);
+	public void deleteAllById(List<Long> meventids);
 	public long countByTitleContaining(String meventtitle);
 
 }

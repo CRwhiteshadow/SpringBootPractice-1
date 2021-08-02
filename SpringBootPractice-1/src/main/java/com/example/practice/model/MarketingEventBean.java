@@ -1,12 +1,18 @@
 package com.example.practice.model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -23,16 +29,14 @@ public class MarketingEventBean implements java.io.Serializable {
 	
 	@Id @Column(name="MEVENTID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer meventid;
+	private Long meventid;
 	
 	@Column(name="MEVENTTITLE")
-	private String meventtitle;
-	
+	private String meventtitle;	
 
 	@Column(name="MEVENTPICTURE")
 	private byte[] meventpicture;
 	
-
 	@Column(name = "MEVENTPICTURENAME")
 	private String meventpicturename;
 	
@@ -47,12 +51,14 @@ public class MarketingEventBean implements java.io.Serializable {
 	@Column(name = "MEVENTNAME")
 	private String meventname;
 	
-
 	@Column(name = "MEVENTDESCRIPTION")
 	private String meventdescription;
 	
+	@ManyToOne(targetEntity = MarketingEventTypeBean.class,fetch = FetchType.LAZY,optional = false)
+	@JoinColumn(name = "MEVENTTYPEID",insertable = false,updatable = false)
+	private MarketingEventTypeBean marketingEventTypeBean;
 	@Column(name = "MEVENTTYPEID")
-	private Integer meventtypeid;
+	private Long meventtypeid;
 	
 	@Column(name = "MEVENTOWNERID")
 	private Integer meventownerid;
@@ -60,11 +66,15 @@ public class MarketingEventBean implements java.io.Serializable {
 	@Column(name = "MEVENTONLINE")
 	private boolean meventonline;
 
-	public Integer getMeventid() {
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="MEVENTID")
+	private List<MarketingEventListBean> marketingEventListBean;
+	
+	public Long getMeventid() {
 		return meventid;
 	}
 
-	public void setMeventid(Integer meventid) {
+	public void setMeventid(Long meventid) {
 		this.meventid = meventid;
 	}
 
@@ -91,7 +101,6 @@ public class MarketingEventBean implements java.io.Serializable {
 	public void setMeventpicturename(String meventpicturename) {
 		this.meventpicturename = meventpicturename;
 	}
-
 	
 	public Timestamp getMeventstartdate() {
 		return meventstartdate;
@@ -125,11 +134,11 @@ public class MarketingEventBean implements java.io.Serializable {
 		this.meventdescription = meventdescription;
 	}
 
-	public Integer getMeventtypeid() {
+	public Long getMeventtypeid() {
 		return meventtypeid;
 	}
 
-	public void setMeventtypeid(Integer meventtypeid) {
+	public void setMeventtypeid(Long meventtypeid) {
 		this.meventtypeid = meventtypeid;
 	}
 
@@ -147,6 +156,14 @@ public class MarketingEventBean implements java.io.Serializable {
 
 	public void setMeventonline(boolean meventonline) {
 		this.meventonline = meventonline;
+	}
+
+	public List<MarketingEventListBean> getMarketingEventListBean() {
+		return marketingEventListBean;
+	}
+
+	public void setMarketingEventListBean(List<MarketingEventListBean> marketingEventListBean) {
+		this.marketingEventListBean = marketingEventListBean;
 	}
 	
 	

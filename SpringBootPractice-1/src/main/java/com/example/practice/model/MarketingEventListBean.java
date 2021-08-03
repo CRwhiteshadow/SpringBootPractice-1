@@ -41,7 +41,7 @@ public class MarketingEventListBean implements java.io.Serializable{
 	private Long meventid;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="MEVENTLISTID")
+//	@JoinColumn(name="MEVENTLISTID")
 	private List<MarketingEventProductListBean> marketingEventProductListBean;
 	
 	public Long getMeventlistid() {

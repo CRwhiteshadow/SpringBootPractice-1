@@ -164,14 +164,29 @@
 						<c:if test="${mlbean0!=null}">
 							<input type="hidden" name="meventlistid" id="meventlistid" value="<c:out value='${mlbean0.meventlistid}'/>"/>						
 							<c:set var="mplbean" value="${mlbean0.marketingEventProductListBean}"/>
-							<c:set var="mp1" value="${mplbean.get(0).product}"/>
-							<c:set var="mp2" value="${mplbean.get(1).product}"/>
-							<c:set var="mp3" value="${mplbean.get(2).product}"/>
-							<c:set var="mp4" value="${mplbean.get(3).product}"/>
-							<input type="text" name="product1" id="product1" value="<c:out value='${mp1.productid}'/>" />
-							<input type="text" name="product2" id="product2" value="<c:out value='${mp2.productid}'/>" />
-							<input type="text" name="product3" id="product3" value="<c:out value='${mp3.productid}'/>" />
-							<input type="text" name="product4" id="product4" value="<c:out value='${mp4.productid}'/>" />
+							<c:forEach begin="0" end="1" step="1" var="i">
+								<div class="row">
+								<c:forEach begin="1" end="4" step="1" var="j">
+									<div class="card col-sm-2">
+										品號:<input type="text" name="product${i*4+j}" id="product${i*4+j}" value="<c:out value='${mplbean.get(i*4+j-1).productid}'/>" />
+										<br>
+										品名:<input type="text" readonly id="product${i*4+j}name" />
+										<br>
+										價格:<input type="text" readonly id="product${i*4+j}price" />
+										<br>
+										<c:choose>
+										<c:when test="${mplbean.get(i*4+j-1).meventproductdiscountprice==0}">
+											活動價:<input type="text" name="product${i*4+j}dcp" id="product${i*4+j}dcp" value="" />
+										</c:when>
+										<c:otherwise>
+											活動價:<input type="text" name="product${i*4+j}dcp" id="product${i*4+j}dcp" value="<c:out value='${mplbean.get(i*4+j-1).meventproductdiscountprice}'/>" />
+										</c:otherwise>
+										</c:choose>
+									</div>
+								</c:forEach>
+								</div>
+								<br>
+							</c:forEach>
 						</c:if>
 						<c:if test="${mlbean0==null}">
 						<c:forEach begin="0" end="1" step="1" var="i">

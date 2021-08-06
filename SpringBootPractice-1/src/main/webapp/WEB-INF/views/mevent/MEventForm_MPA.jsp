@@ -21,7 +21,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<script src="<c:url value='/js/mevent/index.js'/>"></script>
 <title>BackStage</title>
 </head>
 <body>
@@ -98,7 +97,7 @@
 							</select>
 						</c:if>
 						<c:if test="${mevent == null }">
-							<select name="typeid" class="form-control" required>
+							<select name="typeid" class="form-control col-sm-3" required>
                         		<option value="1">會員招募活動</option>
 								<option value="2">商品促銷活動</option>
 								<option value="3">限時搶購活動</option>
@@ -109,18 +108,18 @@
 					<div class="form-group">
 						<label>活動開始時間:</label>
 						<c:set var="ts" value="${mevent.meventstartdate }" />
-						<input type="date" name="startdate" class="form-control" required value="${fn:substring(ts,0,10) }"><span id="spsd"></span><br>
-						<input type="time" name="starttime" step="1" class="form-control" required value="${fn:substring(ts,11,-1) }"><span id="spst"></span>
+						<input type="date" name="startdate" class="form-control col-sm-3" required value="${fn:substring(ts,0,10) }"><span id="spsd"></span><br>
+						<input type="time" name="starttime" step="1" class="form-control col-sm-3" required value="${fn:substring(ts,11,-1) }"><span id="spst"></span>
 					</div>
 					<div class="form-group">
 						<label>活動結束時間:</label>
 						<c:set var="td" value="${mevent.meventenddate }" />
-						<input type="date" name="enddate" class="form-control" required value="${fn:substring(td,0,10) }"><span id="sped"></span><br>
-						<input type="time" name="endtime" step="1" class="form-control" required value="${fn:substring(td,11,-1) }"><span id="spet"></span>
+						<input type="date" name="enddate" class="form-control col-sm-3" required value="${fn:substring(td,0,10) }"><span id="sped"></span><br>
+						<input type="time" name="endtime" step="1" class="form-control col-sm-3" required value="${fn:substring(td,11,-1) }"><span id="spet"></span>
 					</div>
                     <div class="form-group">
 						<label>活動辦法:</label>
-						<textarea rows="5" cols="50" name="description"><c:out value='${mevent.meventdescription }'/></textarea>
+						<textarea rows="5" cols="80" name="description"><c:out value='${mevent.meventdescription }'/></textarea>
 					</div>
                     <div class="form-group">
 						<label>活動是否上線:</label>
@@ -161,19 +160,37 @@
 					</c:if>	
 					<hr>
 					<div class="form-group">
-						<label>活動商品 品號:</label>
+						<label>活動商品</label>
 						<c:if test="${mlbean0!=null}">
-							<input type="hidden" name="meventlistid" id="meventlistid" value="<c:out value='${mlbean0.meventlistid}'/>"/>
+							<input type="hidden" name="meventlistid" id="meventlistid" value="<c:out value='${mlbean0.meventlistid}'/>"/>						
+							<c:set var="mplbean" value="${mlbean0.marketingEventProductListBean}"/>
+							<c:set var="mp1" value="${mplbean.get(0).product}"/>
+							<c:set var="mp2" value="${mplbean.get(1).product}"/>
+							<c:set var="mp3" value="${mplbean.get(2).product}"/>
+							<c:set var="mp4" value="${mplbean.get(3).product}"/>
+							<input type="text" name="product1" id="product1" value="<c:out value='${mp1.productid}'/>" />
+							<input type="text" name="product2" id="product2" value="<c:out value='${mp2.productid}'/>" />
+							<input type="text" name="product3" id="product3" value="<c:out value='${mp3.productid}'/>" />
+							<input type="text" name="product4" id="product4" value="<c:out value='${mp4.productid}'/>" />
 						</c:if>
-						<c:set var="mplbean" value="${mlbean0.marketingEventProductListBean}"/>
-						<c:set var="mp1" value="${mplbean.get(0).product}"/>
-						<c:set var="mp2" value="${mplbean.get(1).product}"/>
-						<c:set var="mp3" value="${mplbean.get(2).product}"/>
-						<c:set var="mp4" value="${mplbean.get(3).product}"/>
-						<input type="text" name="product1" id="product1" value="<c:out value='${mp1.productid}'/>" />
-						<input type="text" name="product2" id="product2" value="<c:out value='${mp2.productid}'/>" />
-						<input type="text" name="product3" id="product3" value="<c:out value='${mp3.productid}'/>" />
-						<input type="text" name="product4" id="product4" value="<c:out value='${mp4.productid}'/>" />
+						<c:if test="${mlbean0==null}">
+						<c:forEach begin="0" end="1" step="1" var="i">
+							<div class="row">
+							<c:forEach begin="1" end="4" step="1" var="j">
+								<div class="card col-sm-2">
+									品號:<input type="text" name="product${i*4+j}" id="product${i*4+j}" value="" />
+									<br>
+									品名:<input type="text" readonly id="product${i*4+j}name" />
+									<br>
+									價格:<input type="text" readonly id="product${i*4+j}price" />
+									<br>
+									活動價:<input type="text" name="product${i*4+j}dcp" id="product${i*4+j}dcp" value="" />
+								</div>
+							</c:forEach>
+							</div>
+							<br>
+						</c:forEach>	
+						</c:if>
 					</div>			
 				</div>
 				<div class="modal-footer">
@@ -194,10 +211,6 @@
 <footer>
 &copy; 2021 EEIT131 第7組
 </footer>
-<!-- 
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.25/datatables.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/backstage/backstage.js"></script>
--->
 </body>
 </html>
 

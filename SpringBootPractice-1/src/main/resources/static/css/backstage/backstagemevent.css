@@ -17,7 +17,7 @@ body {
 	min-width: 800px;
 	background: #fff;
 	padding: 20px 20px;
-	border-radius: 3px;
+	border-radius: 5px;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
 }
 
@@ -287,3 +287,16 @@ table.table .avatar {
 .modal form label {
 	font-weight: normal;
 }	
+
+/* card */
+.row{
+	margin-left: 15px;
+	margin-right: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
+	text-align: center;
+}
+.card{
+	margin-left: 20px;
+	margin-right: 20px;
+}

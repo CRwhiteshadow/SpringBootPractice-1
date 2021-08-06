@@ -99,11 +99,14 @@ public class MarketingEventController {
         marketingEventService.save(mevent);
         mEventListBean = marketingEventListService.findById(mevent.getMarketingEventListBean().get(0).getMeventlistid());
         List<MarketingEventProductListBean> mEventPListBeans = new ArrayList<MarketingEventProductListBean>();
-        for(int i=1;i<=4;i++) {
+        for(int i=1;i<=8;i++) {
 			if(request.getParameter("product"+i)!=null) {
 		        MarketingEventProductListBean mEventPListBean = new MarketingEventProductListBean();
 				mEventPListBean.setMeventlistid(mEventListBean.getMeventlistid());
 				mEventPListBean.setProductid(Integer.parseInt(request.getParameter("product"+i).trim()));
+				if(!request.getParameter("product"+i+"dcp").isEmpty()){
+					mEventPListBean.setMeventproductdiscountprice(Integer.parseInt(request.getParameter("product"+i+"dcp").trim()));
+				}	
 				mEventPListBeans.add(mEventPListBean);       
 			}
 		}
@@ -155,6 +158,9 @@ public class MarketingEventController {
         for(int i=0;i<mEventPListBeans.size();i++) {
         	MarketingEventProductListBean mEventPListBean = mEventPListBeans.get(i);
         	mEventPListBean.setProductid(Integer.parseInt(request.getParameter("product"+(i+1)).trim()));
+			if(!request.getParameter("product"+(i+1)+"dcp").isEmpty()){
+				mEventPListBean.setMeventproductdiscountprice(Integer.parseInt(request.getParameter("product"+(i+1)+"dcp").trim()));
+			}	
         	mEventPListBeans.set(i, mEventPListBean);
         }
         mEventListBean.setMarketingEventProductListBean(mEventPListBeans);

@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.practice.model.MarketingEventListBean;
 import com.example.practice.repository.IMarketingEventListRepository;
-import com.example.practice.repository.IMarketingEventRepository;
 
 @Service("marketingEventListService")
 @Transactional

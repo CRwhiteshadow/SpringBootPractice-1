@@ -7,6 +7,63 @@ $("input[type='time']").focus(clear);
 $("input[type='time']").blur(check);
 $("#btn").click(submit);
 
+$(document).ready(function(){
+	$(document).on('keydown','.pid',function(){
+		var id = this.id;
+		var splitid = id.split('_');
+ 		var index = splitid[1];
+	
+	$("#"+id).autocomplete({
+	source:function(request,response){
+		var context =window.location.pathname.split("/")[1];
+		var uri="/"+context+"/product/rest/findAll";
+		$.ajax({
+			url:uri,
+			type:"get",
+			dataType:"json",
+			data:{
+				"query":request.term
+			},
+			success:function(data){
+				response($.map(data,function(item){
+					return{
+						label:item.productid,
+						value:item.productid.value,
+						name:item.productname,
+						price:item.productprice
+					}
+				}));
+			}
+		});
+	},
+	select:function(event,ui){
+		$(this).val(ui.item);
+		$(this).val(ui.item.value);
+		var pname = ui.item.name;
+		var pprice = ui.item.price;
+		document.getElementById("productname_"+index).value=pname;
+		document.getElementById("productprice_"+index).value=pprice;
+		return false;
+	}
+});
+	})
+})
+
+
+// $(function(){
+// 	var context =window.location.pathname.split("/")[1];
+// 	var uri="/"+context+"/product/rest/findAll";
+// 	$.ajax({
+// 		type:"GET",
+// 		url:uri,
+// 		contentType:"application/json",
+// 		success:function(result){
+// 			console.log(result);
+// 		}
+// 	});
+	
+// })
+
 function fileviewer() {
 	let reader = new FileReader();
 	reader.addEventListener("load", function (e) {

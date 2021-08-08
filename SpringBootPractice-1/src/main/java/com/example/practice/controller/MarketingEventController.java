@@ -100,12 +100,12 @@ public class MarketingEventController {
         mEventListBean = marketingEventListService.findById(mevent.getMarketingEventListBean().get(0).getMeventlistid());
         List<MarketingEventProductListBean> mEventPListBeans = new ArrayList<MarketingEventProductListBean>();
         for(int i=1;i<=8;i++) {
-			if(request.getParameter("product"+i)!=null) {
+			if(request.getParameter("product_"+i)!=null) {
 		        MarketingEventProductListBean mEventPListBean = new MarketingEventProductListBean();
 				mEventPListBean.setMeventlistid(mEventListBean.getMeventlistid());
-				mEventPListBean.setProductid(Integer.parseInt(request.getParameter("product"+i).trim()));
-				if(!request.getParameter("product"+i+"dcp").isEmpty()){
-					mEventPListBean.setMeventproductdiscountprice(Integer.parseInt(request.getParameter("product"+i+"dcp").trim()));
+				mEventPListBean.setProductid(Integer.parseInt(request.getParameter("product_"+i).trim()));
+				if(!request.getParameter("productdcp_"+i).isEmpty()){
+					mEventPListBean.setMeventproductdiscountprice(Integer.parseInt(request.getParameter("productdcp_"+i).trim()));
 				}	
 				mEventPListBeans.add(mEventPListBean);       
 			}
@@ -157,9 +157,9 @@ public class MarketingEventController {
         List<MarketingEventProductListBean> mEventPListBeans = mEventListBean.getMarketingEventProductListBean();
         for(int i=0;i<mEventPListBeans.size();i++) {
         	MarketingEventProductListBean mEventPListBean = mEventPListBeans.get(i);
-        	mEventPListBean.setProductid(Integer.parseInt(request.getParameter("product"+(i+1)).trim()));
-			if(!request.getParameter("product"+(i+1)+"dcp").isEmpty()){
-				mEventPListBean.setMeventproductdiscountprice(Integer.parseInt(request.getParameter("product"+(i+1)+"dcp").trim()));
+        	mEventPListBean.setProductid(Integer.parseInt(request.getParameter("product_"+(i+1)).trim()));
+			if(!request.getParameter("productdcp_"+(i+1)).isEmpty()){
+				mEventPListBean.setMeventproductdiscountprice(Integer.parseInt(request.getParameter("productdcp_"+(i+1)).trim()));
 			}	
         	mEventPListBeans.set(i, mEventPListBean);
         }

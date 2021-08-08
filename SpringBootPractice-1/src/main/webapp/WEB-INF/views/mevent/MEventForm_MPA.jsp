@@ -18,7 +18,9 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="<c:url value='/webjars/jquery-ui/jquery-ui.css'/>">
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script src="<c:url value='/webjars/jquery-ui/jquery-ui.js'/>"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <title>BackStage</title>
@@ -168,18 +170,18 @@
 								<div class="row">
 								<c:forEach begin="1" end="4" step="1" var="j">
 									<div class="card col-sm-2">
-										品號:<input type="text" name="product${i*4+j}" id="product${i*4+j}" value="<c:out value='${mplbean.get(i*4+j-1).productid}'/>" />
+										品號:<input type="text" class="pid" name="product_${i*4+j}" id="product_${i*4+j}" value="<c:out value='${mplbean.get(i*4+j-1).productid}'/>" />
 										<br>
-										品名:<input type="text" readonly id="product${i*4+j}name" />
+										品名:<input type="text" readonly id="productname_${i*4+j}"  value="<c:out value='${mplbean.get(i*4+j-1).product.productname}'/>" />
 										<br>
-										價格:<input type="text" readonly id="product${i*4+j}price" />
+										價格:<input type="text" readonly id="productprice_${i*4+j}"   value="<c:out value='${mplbean.get(i*4+j-1).product.productprice}'/>" />
 										<br>
 										<c:choose>
 										<c:when test="${mplbean.get(i*4+j-1).meventproductdiscountprice==0}">
-											活動價:<input type="text" name="product${i*4+j}dcp" id="product${i*4+j}dcp" value="" />
+											活動價:<input type="text" name="productdcp_${i*4+j}" id="productdcp_${i*4+j}" value="" />
 										</c:when>
 										<c:otherwise>
-											活動價:<input type="text" name="product${i*4+j}dcp" id="product${i*4+j}dcp" value="<c:out value='${mplbean.get(i*4+j-1).meventproductdiscountprice}'/>" />
+											活動價:<input type="text" name="productdcp_${i*4+j}" id="productdcp_${i*4+j}" value="<c:out value='${mplbean.get(i*4+j-1).meventproductdiscountprice}'/>" />
 										</c:otherwise>
 										</c:choose>
 									</div>
@@ -193,13 +195,13 @@
 							<div class="row">
 							<c:forEach begin="1" end="4" step="1" var="j">
 								<div class="card col-sm-2">
-									品號:<input type="text" name="product${i*4+j}" id="product${i*4+j}" value="" />
+									品號:<input type="text" class="pid" name="product_${i*4+j}" id="product_${i*4+j}" value="" />
 									<br>
-									品名:<input type="text" readonly id="product${i*4+j}name" />
+									品名:<input type="text" readonly id="productname_${i*4+j}" />
 									<br>
-									價格:<input type="text" readonly id="product${i*4+j}price" />
+									價格:<input type="text" readonly id="productprice_${i*4+j}" />
 									<br>
-									活動價:<input type="text" name="product${i*4+j}dcp" id="product${i*4+j}dcp" value="" />
+									活動價:<input type="text" name="productdcp_${i*4+j}" id="productdcp_${i*4+j}" value="" />
 								</div>
 							</c:forEach>
 							</div>

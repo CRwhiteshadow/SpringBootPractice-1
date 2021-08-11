@@ -29,14 +29,14 @@ Hi,<c:out value='${sessionScope.membername}' />
 <a href="<c:url value='/logout'/>"><button value="logout">logout</button></a>
 <hr>
 <div class="row">
-	<c:forEach items="${products}" var="product">
+	<c:forEach items="${products}" var="product" varStatus="i">
 	<c:set var="id" value='${product.productid}' />
 	<div class="card col" >
-	品號:<c:out value='${product.productid}' />
+	品號:<c:out value='${product.productid}'/>
 	<br>
 	品名:<c:out value='${product.productname }' />
 	<br>
-	<img src="data:image/jpg;base64,${ImgOut().ImgWrite(product.productpic) }">
+	<img src="data:image/jpg;base64,${ImgOut().ImgWrite(product.productpic)}">
 	<br>
 	<c:choose>
 	<c:when test="${productdcps.containsKey(id)}">
@@ -47,11 +47,26 @@ Hi,<c:out value='${sessionScope.membername}' />
 	</c:otherwise>
 	</c:choose>
 	<br>
-	<c:import url="../cart/quantity_control.jsp"/>
-	<br>
-	<button value="add to cart">add to cart</button>
+<%-- 	<c:import url="../cart/quantity_control.jsp"/> --%>
+<!-- 	<br> -->
+	<input type="hidden" id="productid_${i.count}" value="${id}"/>
+	<button class="btn btn-primary" value="add to cart" id="tocart_${i.count}">加入購物車</button>
 	</div>
 	</c:forEach>
 </div>
 </body>
+<script>
+$(".btn-primary").on("click",function(){
+	var qty = 1;
+	var pid = $(this).prev("input").val();
+	var context =window.location.pathname.split("/")[1];
+	var uri = uri="/"+context+"/cart/add/"+pid+"/"+qty;
+	$.ajax({
+		type:"post",
+		url:uri,
+		}).done(function(response){
+			alert(response);
+			});
+})
+</script>
 </html>

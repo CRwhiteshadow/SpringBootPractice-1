@@ -37,13 +37,13 @@ public class MarketingEventRestController {
 	@GetMapping(value = "/findOnlineMevent",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
 	public List<MarketingEventBean> findOnlineMvent() {
 		Timestamp time = Timestamp.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-		return marketingEventService.findByMeventstartdateBeforeAndMeventenddateAndMeventonlineTrue(time);
+		return marketingEventService.findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrue(time);
 	}
 	
 	@GetMapping(value = "/findOnlineMeventProduct/{id}",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
 	public List<MarketingEventProductListBean> findOnlineMeventProduct(@PathVariable("id") Integer pid) {
 		Timestamp time = Timestamp.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-		return marketingEventService.findByMeventstartdateBeforeAndMeventenddateAndMeventonlineTrueAndProductid(time, pid);
+		return marketingEventService.findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrueAndProductid(time, pid);
 	}
 
 }

@@ -63,14 +63,14 @@ public class MarketingEventService implements IMarketingEventService {
 	}
 
 	@Override
-	public List<MarketingEventBean> findByMeventstartdateBeforeAndMeventenddateAndMeventonlineTrue(Timestamp time) {
-		return marketingEventDAO.findByMeventstartdateBeforeAndMeventenddateAndMeventonlineTrue(time);
+	public List<MarketingEventBean> findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrue(Timestamp time) {
+		return marketingEventDAO.findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrue(time);
 	}
 
 	@Override
-	public List<MarketingEventProductListBean> findByMeventstartdateBeforeAndMeventenddateAndMeventonlineTrueAndProductid(
+	public List<MarketingEventProductListBean> findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrueAndProductid(
 			Timestamp time, Integer productid) {
-		return marketingEventDAO.findByMeventstartdateBeforeAndMeventenddateAndMeventonlineTrueAndProductid(time, productid);
+		return marketingEventDAO.findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrueAndProductid(time, productid);
 	}
 	
 	

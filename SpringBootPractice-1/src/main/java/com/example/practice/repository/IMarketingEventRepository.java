@@ -21,9 +21,9 @@ public interface IMarketingEventRepository extends JpaRepository<MarketingEventB
 	public long countByTitleContaining(String meventtitle);
 
 	@Query("select m from MarketingEventBean m where m.meventstartdate <?1 and m.meventenddate >?1 and m.meventonline=true")
-	public List<MarketingEventBean> findByMeventstartdateBeforeAndMeventenddateAndMeventonlineTrue(Timestamp time);
+	public List<MarketingEventBean> findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrue(Timestamp time);
 	
 	@Query("select mepl from MarketingEventProductListBean mepl join MarketingEventListBean mel on mepl.meventlistid = mel.meventlistid join MarketingEventBean me on mel.meventid = me.meventid where me.meventstartdate <?1 and me.meventenddate >?1 and me.meventonline=true and mepl.productid=?2")
-	public List<MarketingEventProductListBean> findByMeventstartdateBeforeAndMeventenddateAndMeventonlineTrueAndProductid(Timestamp time,Integer productid);
+	public List<MarketingEventProductListBean> findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrueAndProductid(Timestamp time,Integer productid);
 
 }

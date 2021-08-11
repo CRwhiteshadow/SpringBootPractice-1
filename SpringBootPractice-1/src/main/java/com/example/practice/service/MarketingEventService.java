@@ -1,5 +1,6 @@
 package com.example.practice.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.practice.model.MarketingEventBean;
+import com.example.practice.model.MarketingEventProductListBean;
 import com.example.practice.repository.IMarketingEventRepository;
 
 @Service("marketingEventService")
@@ -58,6 +60,17 @@ public class MarketingEventService implements IMarketingEventService {
 	public void deleteAllById(List<Long> meventids) {
 		marketingEventDAO.deleteAllById(meventids);
 		
+	}
+
+	@Override
+	public List<MarketingEventBean> findByMeventstartdateBeforeAndMeventenddateAndMeventonlineTrue(Timestamp time) {
+		return marketingEventDAO.findByMeventstartdateBeforeAndMeventenddateAndMeventonlineTrue(time);
+	}
+
+	@Override
+	public List<MarketingEventProductListBean> findByMeventstartdateBeforeAndMeventenddateAndMeventonlineTrueAndProductid(
+			Timestamp time, Integer productid) {
+		return marketingEventDAO.findByMeventstartdateBeforeAndMeventenddateAndMeventonlineTrueAndProductid(time, productid);
 	}
 	
 	

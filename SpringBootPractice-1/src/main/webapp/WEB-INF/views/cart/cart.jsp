@@ -25,7 +25,7 @@
     }
     
 .container.custom-container-width {
-    max-width: 1300px;      
+    max-width: 1500px;      
 }
 
   </style>
@@ -33,42 +33,7 @@
 </head>
 <body>
 <div class="container custom-container-width">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" href="#"
-                >Home <span class="sr-only">(current)</span></a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Features</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Pricing</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#">Disabled</a>
-            </li>
-          </ul>
-			Hi,<c:out value='${sessionScope.membername}' /> 
-&nbsp; &nbsp;
-<a href="<c:url value='/cart'/>"><button value="cart">cart</button></a>
-&nbsp; &nbsp;
-<a href="<c:url value='/logout'/>"><button value="logout">logout</button></a>
-          <form class="form-inline">
-            <input
-              class="form-control mr-sm-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-              Search
-            </button>
-          </form>
-        </div>
-      </nav>
+<%@include file="../common/nav.jsp" %>
 <c:choose>
   <c:when test='${cartItems.size()==0}'>
     <div style="margin: auto" align="center">
@@ -160,10 +125,12 @@
             <span class="h3"> 結帳金額</span>
           </div>
           <div class="mt-2" style="margin: auto" align="center">
-            <span class="h2" id="eTotal"></span>
+            <span class="h2">NT$</span><span class="h2" id="eTotal"></span>
           </div>
           <div class="mt-2 p-3" style="margin: auto" align="center">
-            <button class="btn btn-danger">結帳</button>
+          	<form action="<c:url value='/checkout'/>" method="get">
+            	<button type="submit" class="btn btn-danger">結帳</button>
+            </form>
           </div>
         </div> 
         <!--整個商品結束在這  -->

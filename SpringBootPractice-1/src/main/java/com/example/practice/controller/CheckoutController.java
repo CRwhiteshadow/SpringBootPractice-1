@@ -17,18 +17,16 @@ import com.example.practice.model.Product;
 import com.example.practice.service.ICartItemService;
 import com.example.practice.service.IMarketingEventService;
 import com.example.practice.service.IMemberService;
-import com.example.practice.service.IProductService;
 
 @Controller
-public class CartController {
+public class CheckoutController {
 
+	@Autowired ICartItemService cartItemService;
 	@Autowired private IMarketingEventService marketingEventService;
 	@Autowired private IMemberService memberService;
-	@Autowired private IProductService productService;
-	@Autowired private ICartItemService cartItemService;
 	
-	@GetMapping("/cart")
-	public String cart(HttpServletRequest request,Model m) {
+	@GetMapping("/checkout")
+	public String showPage(Model m,HttpServletRequest request) {
 		Integer id=(Integer)(request.getSession().getAttribute("memberid"));
 		Member member = memberService.findByMemberid(id);
 		List<CartItem> cartItems = cartItemService.findByMember(member);
@@ -40,7 +38,6 @@ public class CartController {
 		Map<Integer , Integer> productdcps = marketingEventService.productdcp(products);
 		m.addAttribute("cartItems", cartItems);
 		m.addAttribute("productdcps", productdcps);
-		return "/cart/cart";
+		return "checkout/checkout";
 	}
-	
 }

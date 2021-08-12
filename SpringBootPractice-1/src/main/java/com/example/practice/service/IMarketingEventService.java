@@ -2,9 +2,11 @@ package com.example.practice.service;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 import com.example.practice.model.MarketingEventBean;
 import com.example.practice.model.MarketingEventProductListBean;
+import com.example.practice.model.Product;
 
 public interface IMarketingEventService {
 	
@@ -18,5 +20,6 @@ public interface IMarketingEventService {
 	public void deleteAllById(List<Long> meventids);
 	public long countByTitleContaining(String meventtitle);
 	public List<MarketingEventProductListBean> findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrueAndProductid(Timestamp time,Integer productid);
-
+	public Map<Integer , Integer> productdcp(List<Product> products);
+	
 }

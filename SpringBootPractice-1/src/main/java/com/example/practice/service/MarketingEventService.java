@@ -1,7 +1,12 @@
 package com.example.practice.service;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.practice.model.MarketingEventBean;
 import com.example.practice.model.MarketingEventProductListBean;
+import com.example.practice.model.Product;
 import com.example.practice.repository.IMarketingEventRepository;
 
 @Service("marketingEventService")
@@ -71,6 +77,25 @@ public class MarketingEventService implements IMarketingEventService {
 	public List<MarketingEventProductListBean> findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrueAndProductid(
 			Timestamp time, Integer productid) {
 		return marketingEventDAO.findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrueAndProductid(time, productid);
+	}
+
+	@Override
+	public Map<Integer, Integer> productdcp(List<Product> products) {
+		Map<Integer , Integer> dcpMap = new HashMap<Integer, Integer>(); 
+		for (int i=0;i<products.size();i++) {
+			Timestamp time = Timestamp.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			List<MarketingEventProductListBean> mepls = findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrueAndProductid(time, products.get(i).getProductid());
+			for (int j=0;j<mepls.size();j++) {
+				TreeSet<Integer> dcp = new TreeSet<Integer>();
+				if(mepls.get(j).getMeventproductdiscountprice()!=0) {
+					dcp.add(mepls.get(j).getMeventproductdiscountprice());
+				}
+			if(dcp.size()!=0) {
+				dcpMap.put(products.get(i).getProductid(), dcp.first());
+			}
+			}
+		}
+		return dcpMap;
 	}
 	
 	

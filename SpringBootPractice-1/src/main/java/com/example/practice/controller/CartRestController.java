@@ -3,6 +3,7 @@ package com.example.practice.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,33 @@ public class CartRestController {
 		return num+"個商品已加入購物車";
 		}
 		
+	}
+	
+	@PostMapping("/cart/update/{productid}/{quantity}")
+	public  void updateQuantity(@PathVariable("productid") Integer pid,
+			@PathVariable("quantity")int quantity,
+			HttpServletRequest request) {
+		try {
+		Integer memberid =(Integer)request.getSession().getAttribute("memberid");
+		Member member = memberService.findByMemberid(memberid);
+		Product product = productService.findById(pid);
+		cartItemService.updateQuantity(quantity, member, product);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@DeleteMapping("/cart/delete/{productid}")
+	public void deleteProduct(@PathVariable("productid") Integer pid,
+			HttpServletRequest request) {
+		try {
+			Integer memberid =(Integer)request.getSession().getAttribute("memberid");
+			Member member = memberService.findByMemberid(memberid);
+			Product product = productService.findById(pid);
+			cartItemService.deleteByMemberAndProduct(member, product);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

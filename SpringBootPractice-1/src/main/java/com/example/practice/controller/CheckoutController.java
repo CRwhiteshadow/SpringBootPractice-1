@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.practice.model.CartItem;
 import com.example.practice.model.CheckoutInfo;
@@ -47,5 +48,20 @@ public class CheckoutController {
 		m.addAttribute("postMobile", member.getPostmobile());
 		m.addAttribute("postAddress", memberService.getPostAddress(member));
 		return "checkout/checkout";
+	}
+	
+	@PostMapping("/place_order")
+	public String placeOrder(HttpServletRequest request) {
+		String paymentway = request.getParameter("paymentway");
+		switch(paymentway) {
+		case "COD":
+			break;
+		case "Card":
+			break;
+		case "Paypal":
+			break;
+		}
+		
+		return "checkout/order_completed";
 	}
 }

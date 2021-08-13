@@ -68,12 +68,12 @@
       			<div class="card-header"><h5>付款方式</h5></div>
       			<div class="card-body">
       				<p>
-      				<form method="post" action="">
-      					<input type="radio" name="paymentway">貨到付款
+      				<form method="post" action="<c:url value='/place_order'/>">
+      					<input type="radio" name="paymentway" value="COD">貨到付款
       					&nbsp;
-      					<input type="radio" name="paymentway">信用卡
+      					<input type="radio" name="paymentway" value="Card">信用卡
       					&nbsp;
-      					<input type="radio" name="paymentway">Paypal
+      					<input type="radio" name="paymentway" value="Paypal">Paypal
       					&nbsp;&nbsp;
       					<button type="submit" class="button btn btn-success d-none" id="confirmBtn">確認訂購</button>
       				</form>

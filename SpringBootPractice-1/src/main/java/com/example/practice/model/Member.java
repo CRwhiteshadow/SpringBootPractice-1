@@ -38,6 +38,24 @@ public class Member implements java.io.Serializable{
 	
 	@Column(name = "MOBILE")
 	private String mobile;
+	
+	@Column(name = "PostalCode", nullable = true)
+	private String postalcode;
+	
+	@Column(name = "City", nullable = true)
+	private String city;
+	
+	@Column(name = "Region", nullable = true)
+	private String region;
+	
+	@Column(name = "Address", nullable = true)
+	private String address;
+	
+	@Column(name = "PostName", nullable = true)
+	private String postname;
+	
+	@Column(name = "PostMobile", nullable = true)
+	private String postmobile;
 
 	public Integer getMemberid() {
 		return memberid;
@@ -101,6 +119,54 @@ public class Member implements java.io.Serializable{
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public String getPostalcode() {
+		return postalcode;
+	}
+
+	public void setPostalcode(String postalcode) {
+		this.postalcode = postalcode;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPostname() {
+		return postname;
+	}
+
+	public void setPostname(String postname) {
+		this.postname = postname;
+	}
+
+	public String getPostmobile() {
+		return postmobile;
+	}
+
+	public void setPostmobile(String postmobile) {
+		this.postmobile = postmobile;
 	}
 
 	

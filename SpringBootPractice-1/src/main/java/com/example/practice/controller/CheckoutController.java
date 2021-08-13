@@ -43,6 +43,9 @@ public class CheckoutController {
 		m.addAttribute("cartItems", cartItems);
 		m.addAttribute("productdcps", productdcps);
 		m.addAttribute("checkoutInfo", checkoutInfo);
+		m.addAttribute("postName", member.getPostname());
+		m.addAttribute("postMobile", member.getPostmobile());
+		m.addAttribute("postAddress", memberService.getPostAddress(member));
 		return "checkout/checkout";
 	}
 }

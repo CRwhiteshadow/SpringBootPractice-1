@@ -17,14 +17,12 @@ import com.example.practice.model.Product;
 import com.example.practice.service.ICartItemService;
 import com.example.practice.service.IMarketingEventService;
 import com.example.practice.service.IMemberService;
-import com.example.practice.service.IProductService;
 
 @Controller
 public class CartController {
 
 	@Autowired private IMarketingEventService marketingEventService;
 	@Autowired private IMemberService memberService;
-	@Autowired private IProductService productService;
 	@Autowired private ICartItemService cartItemService;
 	
 	@GetMapping("/cart")
@@ -40,6 +38,7 @@ public class CartController {
 		Map<Integer , Integer> productdcps = marketingEventService.productdcp(products);
 		m.addAttribute("cartItems", cartItems);
 		m.addAttribute("productdcps", productdcps);
+		m.addAttribute("havePostAddress", memberService.havePostAddress(member));
 		return "/cart/cart";
 	}
 	

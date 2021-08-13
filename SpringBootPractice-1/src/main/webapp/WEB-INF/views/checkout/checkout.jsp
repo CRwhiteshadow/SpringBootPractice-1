@@ -19,7 +19,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <!-- Popper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <style>
     .product{
       max-width: 200px;
@@ -38,11 +38,23 @@
       <div class="row m-1 ">
       	<div class="col-sm-7">
       		<div class="card">
-      			<div class="card-header"><h5>配送資訊</h5></div>
+      			<div class="card-header"><h5>收件資訊</h5></div>
       			<div class="card-body">
       				<p>
-      					<b>配送至:</b>
+      					<b>收件人:&nbsp;<c:out value='${postName}'/></b>
       				</p>
+      				<p>
+      					<b>連絡電話:&nbsp;<c:out value='${postMobile}'/></b>
+      				</p>
+      				<p>
+      					<b>收件地址:&nbsp;<c:out value='${postAddress}'/></b>
+      				</p>
+      				<a href="<c:url value='/member/MemberAdress?redirect=checkout'/>">更改收件地址</a>
+      			</div>
+      		</div>
+      		<div class="card">
+      			<div class="card-header"><h5>配送資訊</h5></div>
+      			<div class="card-body">
       				<p>
       					<b>配送日程:&nbsp;預計<c:out value='${checkoutInfo.deliverDays}'/>天</b>
       				</p>
@@ -56,11 +68,15 @@
       			<div class="card-header"><h5>付款方式</h5></div>
       			<div class="card-body">
       				<p>
-      					<input type="radio" name="paymentway" value="">貨到付款
+      				<form method="post" action="">
+      					<input type="radio" name="paymentway">貨到付款
       					&nbsp;
-      					<input type="radio" name="paymentway" value="">信用卡
+      					<input type="radio" name="paymentway">信用卡
       					&nbsp;
-      					<input type="radio" name="paymentway" value="">Paypal
+      					<input type="radio" name="paymentway">Paypal
+      					&nbsp;&nbsp;
+      					<button type="submit" class="button btn btn-success d-none" id="confirmBtn">確認訂購</button>
+      				</form>
       				</p>
       			</div>
       		</div>
@@ -113,6 +129,12 @@
       		</div>
       	</div>
       </div>
-      
+<script>
+$(document).ready(function(){
+	$(":radio").on("click",function(){
+		$("#confirmBtn").removeClass("d-none");
+		});
+});
+</script>     
 </body>
 </html>

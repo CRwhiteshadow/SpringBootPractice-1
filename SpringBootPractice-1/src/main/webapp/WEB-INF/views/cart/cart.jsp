@@ -128,9 +128,17 @@
             <span class="h2">NT$</span><span class="h2" id="eTotal"></span>
           </div>
           <div class="mt-2 p-3" style="margin: auto" align="center">
-          	<form action="<c:url value='/checkout'/>" method="get">
+          <c:choose>
+          	<c:when test="${havePostAddress==true}">
+          	  <form action="<c:url value='/checkout'/>" method="get">
             	<button type="submit" class="btn btn-danger">結帳</button>
-            </form>
+              </form>
+            </c:when>
+            <c:otherwise>
+              <div><span class="h5 text-warning" >抱歉，您沒有填寫配送地址</span></div>
+              <a href="<c:url value='/member/MemberAdress?redirect=cart'/>">更新配送地址</a>
+            </c:otherwise>
+          </c:choose>
           </div>
         </div> 
         <!--整個商品結束在這  -->

@@ -31,4 +31,37 @@ public class MemberService implements IMemberService {
 		return repo.findByEmail(email);
 	}
 
+	@Override
+	public Member save(Member member) {
+		return repo.save(member);
+	}
+
+	@Override
+	public boolean havePostAddress(Member member) {
+		String postalcode = member.getPostalcode();
+		String city = member.getCity();
+		String region = member.getRegion();
+		String address = member.getAddress();
+		String postname = member.getPostname();
+		String postmobile = member.getPostmobile();
+		if(postalcode!=null && city!=null && region!=null && address!=null && postname!=null && postmobile!=null) {
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
+
+	@Override
+	public String getPostAddress(Member member) {
+		String postalcode = member.getPostalcode();
+		String city = member.getCity();
+		String region = member.getRegion();
+		String address = member.getAddress();
+		String postAddress = postalcode + city + region + address;
+		return postAddress;
+	}
+
+	
+	
 }

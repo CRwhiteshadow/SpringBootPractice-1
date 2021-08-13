@@ -12,18 +12,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.practice.model.CartItem;
+import com.example.practice.model.CheckoutInfo;
 import com.example.practice.model.Member;
 import com.example.practice.model.Product;
 import com.example.practice.service.ICartItemService;
+import com.example.practice.service.ICheckoutService;
 import com.example.practice.service.IMarketingEventService;
 import com.example.practice.service.IMemberService;
 
 @Controller
 public class CheckoutController {
 
-	@Autowired ICartItemService cartItemService;
+	@Autowired private ICartItemService cartItemService;
 	@Autowired private IMarketingEventService marketingEventService;
 	@Autowired private IMemberService memberService;
+	@Autowired private ICheckoutService checkoutService;
 	
 	@GetMapping("/checkout")
 	public String showPage(Model m,HttpServletRequest request) {
@@ -36,8 +39,10 @@ public class CheckoutController {
 			products.add(product);
 		}
 		Map<Integer , Integer> productdcps = marketingEventService.productdcp(products);
+		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(cartItems);
 		m.addAttribute("cartItems", cartItems);
 		m.addAttribute("productdcps", productdcps);
+		m.addAttribute("checkoutInfo", checkoutInfo);
 		return "checkout/checkout";
 	}
 }

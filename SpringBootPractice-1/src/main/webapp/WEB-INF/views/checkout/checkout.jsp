@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,18 +36,19 @@
 <div class="container custom-container-width">
 <%@include file="../common/nav.jsp" %>
       <div class="row m-1 ">
-      	<div class="col-sm-8">
+      	<div class="col-sm-7">
       		<div class="card">
-      			<div class="card-header"><h5>配送地址</h5></div>
+      			<div class="card-header"><h5>配送資訊</h5></div>
       			<div class="card-body">
       				<p>
       					<b>配送至:</b>
       				</p>
       				<p>
-      					<b>配送日程:</b>
+      					<b>配送日程:&nbsp;預計<c:out value='${checkoutInfo.deliverDays}'/>天</b>
       				</p>
       				<p>
-      					<b>預計送達日:</b>
+      					<c:set var="date" value='${checkoutInfo.deliverDate}'/>
+      					<b>送達日:&nbsp;預計為<fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/></b>
       				</p>
       			</div>
       		</div>
@@ -63,7 +65,7 @@
       			</div>
       		</div>
       	</div>
-      	<div class="col-sm-4">
+      	<div class="col-sm-5">
       		<div class="card">
       			<div class="card-header"><h5>訂單摘要</h5></div>
       			<div class="card-body">
@@ -98,15 +100,15 @@
       			</div>
       			<div class="row mt-2">
       				<div class="col" align="right">商品合計:</div>
-      				<div class="col">NT$</div>
+      				<div class="col">NT$<c:out value='${checkoutInfo.productTotal}'/></div>
       			</div>
       			<div class="row mt-2">
       				<div class="col" align="right">運費:</div>
-      				<div class="col">NT$</div>
+      				<div class="col">NT$<c:out value='${checkoutInfo.shippingCostTotal}'/></div>
       			</div>
       			<div class="row mt-2">
       				<div class="col" align="right">付款總計:</div>
-      				<div class="col"><b>NT$</b></div>
+      				<div class="col"><b>NT$<c:out value='${checkoutInfo.paymentTotal}'/></b></div>
       			</div>
       		</div>
       	</div>

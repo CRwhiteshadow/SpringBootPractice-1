@@ -37,6 +37,9 @@ public class Product implements java.io.Serializable{
 
 	@Column(name = "PRODUCTPIC")
 	private byte[] productpic;
+	
+	@Column(name = "PRODUCTCOST")
+	private int productcost;
 
 	@JsonIgnore
 	@OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
@@ -73,6 +76,14 @@ public class Product implements java.io.Serializable{
 
 	public void setProductpic(byte[] productpic) {
 		this.productpic = productpic;
+	}
+
+	public int getProductcost() {
+		return productcost;
+	}
+
+	public void setProductcost(int productcost) {
+		this.productcost = productcost;
 	}
 
 	public Set<MarketingEventProductListBean> getmEventProductListBean() {

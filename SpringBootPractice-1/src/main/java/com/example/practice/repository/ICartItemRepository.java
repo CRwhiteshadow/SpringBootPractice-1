@@ -27,4 +27,6 @@ public interface ICartItemRepository extends JpaRepository<CartItem, Integer> {
 	
 	public void deleteByMemberAndProduct(Member member,Product product);
 	
+	public void deleteByMember(Member member);
+	
 }

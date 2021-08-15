@@ -63,4 +63,10 @@ public class CartItemService implements ICartItemService {
 		return updateQuantity;
 	}
 
+	@Override
+	public void deleteByMember(Member member) {
+		repo.deleteByMember(member);
+		
+	}
+
 }

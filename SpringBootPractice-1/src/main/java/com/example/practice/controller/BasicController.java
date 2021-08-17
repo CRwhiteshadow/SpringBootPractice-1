@@ -46,9 +46,9 @@ public class BasicController {
 		return "redirect:/";
 	}
 	
-	@PostMapping("/login")
+	@PostMapping("/Login")
 	public String Login(Model m,HttpServletRequest request) {
-		String email = request.getParameter("email");
+		String email = request.getParameter("loginEmail");
 		Member member = memberService.findByEmail(email);
 			request.getSession().setAttribute("memberid", member.getMemberid());
 			request.getSession().setAttribute("membername", member.getFirstname()+member.getLastname());
@@ -56,7 +56,7 @@ public class BasicController {
 		Map<Integer , Integer> productdcps = marketingEventService.productdcp(products);
 		m.addAttribute("products", products);
 		m.addAttribute("productdcps", productdcps);
-		return "/product/productlist";
+		return "redirect:/";
 	}
 	
 }

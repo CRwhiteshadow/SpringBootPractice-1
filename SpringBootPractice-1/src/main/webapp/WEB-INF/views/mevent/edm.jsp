@@ -47,13 +47,13 @@
 					<div class="card col">
 						<img class="card-img-top" src="data:image/jpg;base64,${ImgOut().ImgWrite(meplbean.get((i-1)*4+(j-1)).product.productpic)}" />					
 						<div class="card-body">
-							<div>
+							<div class="productname">
 								<a href="#"><h6 class="card-title"><c:out value="${meplbean.get((i-1)*4+(j-1)).product.productname}"/></h5></a>							
 							</div>
 							<div class="p-1" align="left">
 								<c:choose>
-									<c:when test="${meplbean.get((i-1)*4+(j-1)).meventproductdiscountprice != 0}">
-										<h4>價格:&nbsp;<s><c:out value='${meplbean.get((i-1)*4+(j-1)).product.productprice}'/></s>&nbsp;<b style="color:#EB7097;font-size:36px;"><c:out value='${meplbean.get((i-1)*4+(j-1)).meventproductdiscountprice}'/></b></h4>
+									<c:when test="${productdcps.containsKey(meplbean.get((i-1)*4+(j-1)).product.productid)}">
+										<h4><s>價格:&nbsp;<c:out value='${meplbean.get((i-1)*4+(j-1)).product.productprice}'/></s>&nbsp;<span style="color:#EB7097;">特價:&nbsp;</span><b style="color:#EB7097;font-size:36px;"><c:out value='${productdcps.get(meplbean.get((i-1)*4+(j-1)).product.productid)}'/></b></h4>
 									</c:when>
 								<c:otherwise>
 										<h4>價格:&nbsp;<c:out value='${meplbean.get((i-1)*4+(j-1)).product.productprice}'/></h4>
@@ -82,6 +82,19 @@
 <%@include file="../common/footer.jsp" %>
 </body>
 <script>
+/* 品名切齊高度 */
+$(document).ready(function(){
+	var h = 0;
+	$(".productname").each(function(){
+		if($(this).height()>h){
+			h = $(this).height();
+			}
+		});
+	$(".productname").css("height", h + "px");
+});
+
+
+/* 加入購物車 */
 $(".btn-primary").on("click",function(){
 	var qty = 1;
 	var pid = $(this).prev("input").val();

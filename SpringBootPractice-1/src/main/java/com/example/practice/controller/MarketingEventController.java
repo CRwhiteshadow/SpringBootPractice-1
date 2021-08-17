@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.practice.model.MarketingEventBean;
 import com.example.practice.model.MarketingEventListBean;
 import com.example.practice.model.MarketingEventProductListBean;
+import com.example.practice.model.Product;
 import com.example.practice.service.IMarketingEventListService;
 import com.example.practice.service.IMarketingEventService;
+import com.example.practice.service.IProductService;
 
 
 
@@ -36,6 +40,8 @@ public class MarketingEventController {
 	
 	@Autowired
 	private IMarketingEventListService marketingEventListService;
+	
+	@Autowired private IProductService productService;
 	
 	@GetMapping("")
 	public String showForm(Model m) {
@@ -183,10 +189,17 @@ public class MarketingEventController {
 		return "redirect:/mevent";
 	}
 	
-	@GetMapping("/edm/{id}")
-	public String showEdm(@PathVariable("id") Long id,Model m) {
-		MarketingEventBean mevent = marketingEventService.findById(id);
+	@GetMapping("/edm/{meventtitle}")
+	public String showEdm(@PathVariable("meventtitle") String meventtitle,Model m) {
+		MarketingEventBean mevent = marketingEventService.findByMeventtile(meventtitle);
+		List<MarketingEventProductListBean> mepls = mevent.getMarketingEventListBean().get(0).getMarketingEventProductListBean();
+		List<Product> products = new ArrayList<Product>();
+		for(int i=0;i<mepls.size();i++) {
+			products.add(productService.findById(mepls.get(i).getProductid()));
+		}
+		Map<Integer, Integer> productdcps = marketingEventService.productdcp(products);
 		m.addAttribute("mevent", mevent);
+		m.addAttribute("productdcps", productdcps);
 		return "mevent/edm";
 	}
 }

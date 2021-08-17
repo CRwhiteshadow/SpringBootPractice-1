@@ -21,5 +21,6 @@ public interface IMarketingEventService {
 	public long countByTitleContaining(String meventtitle);
 	public List<MarketingEventProductListBean> findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrueAndProductid(Timestamp time,Integer productid);
 	public Map<Integer , Integer> productdcp(List<Product> products);
+	public MarketingEventBean findByMeventtile(String meventtitle);
 	
 }

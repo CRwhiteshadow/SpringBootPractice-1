@@ -185,7 +185,7 @@
                    			<div class="carousel-item">
                    		</c:otherwise>
                    	</c:choose>
-                    <a href="<c:url value='/mevent/edm/${mevent.meventid}'/>"><img class="d-block w-100 img-fluid" src="data:image/jpg;base64,${ImgOut().ImgWrite(mevent.meventpicture) }" style="object-fit: cover;height:500px;"/></a>
+                    <a href="<c:url value='/mevent/edm/${mevent.meventtitle}'/>"><img class="d-block w-100 img-fluid" src="data:image/jpg;base64,${ImgOut().ImgWrite(mevent.meventpicture) }" style="object-fit: cover;height:500px;"/></a>
                    </div>
                 </c:forEach>
 			</div>

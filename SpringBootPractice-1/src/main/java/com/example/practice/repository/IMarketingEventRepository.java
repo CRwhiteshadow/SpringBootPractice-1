@@ -26,4 +26,7 @@ public interface IMarketingEventRepository extends JpaRepository<MarketingEventB
 	@Query("select mepl from MarketingEventProductListBean mepl join MarketingEventListBean mel on mepl.meventlistid = mel.meventlistid join MarketingEventBean me on mel.meventid = me.meventid where me.meventstartdate <?1 and me.meventenddate >?1 and me.meventonline=true and mepl.productid=?2")
 	public List<MarketingEventProductListBean> findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrueAndProductid(Timestamp time,Integer productid);
 
+	@Query("select m from MarketingEventBean m where m.meventtitle=?1")
+	public MarketingEventBean findByMeventtile(String meventtitle);
+	
 }

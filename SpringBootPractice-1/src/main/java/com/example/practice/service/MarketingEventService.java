@@ -97,6 +97,11 @@ public class MarketingEventService implements IMarketingEventService {
 		}
 		return dcpMap;
 	}
+
+	@Override
+	public MarketingEventBean findByMeventtile(String meventtitle) {
+		return marketingEventDAO.findByMeventtile(meventtitle);
+	}
 	
 	
 

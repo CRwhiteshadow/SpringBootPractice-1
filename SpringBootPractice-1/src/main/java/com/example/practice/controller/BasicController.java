@@ -1,5 +1,8 @@
 package com.example.practice.controller;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.practice.model.MarketingEventBean;
 import com.example.practice.model.Member;
 import com.example.practice.model.Product;
 import com.example.practice.service.ICartItemService;
@@ -28,10 +32,10 @@ public class BasicController {
 	
 	@GetMapping("/")
 	public String showIndex(Model m) {
-//		Timestamp time = Timestamp.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-//		List<MarketingEventBean> mevents = marketingEventService.findByMeventstartdateBeforeAndMeventenddateAndMeventonlineTrue(time);
-//		m.addAttribute("mevents", mevents);
-		return "/Login/Login";
+		Timestamp time = Timestamp.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		List<MarketingEventBean> mevents = marketingEventService.findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrue(time);
+		m.addAttribute("mevents", mevents);
+		return "index";
 	}
 	
 

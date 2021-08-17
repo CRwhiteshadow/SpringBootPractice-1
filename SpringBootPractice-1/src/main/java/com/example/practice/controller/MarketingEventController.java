@@ -182,4 +182,11 @@ public class MarketingEventController {
 		marketingEventService.deleteAllById(meventids);
 		return "redirect:/mevent";
 	}
+	
+	@GetMapping("/edm/{id}")
+	public String showEdm(@PathVariable("id") Long id,Model m) {
+		MarketingEventBean mevent = marketingEventService.findById(id);
+		m.addAttribute("mevent", mevent);
+		return "mevent/edm";
+	}
 }

@@ -29,4 +29,7 @@ public interface ICartItemRepository extends JpaRepository<CartItem, Integer> {
 	
 	public void deleteByMember(Member member);
 	
+	@Query("select count(*) from CartItem c where c.member=?1")
+	public int countCartItems(Member member);
+	
 }

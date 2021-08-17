@@ -65,8 +65,12 @@ public class CartItemService implements ICartItemService {
 
 	@Override
 	public void deleteByMember(Member member) {
-		repo.deleteByMember(member);
-		
+		repo.deleteByMember(member);		
+	}
+	
+	@Override
+	public int countCartItems(Member member) {
+		return repo.countCartItems(member);
 	}
 
 }

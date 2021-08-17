@@ -15,4 +15,5 @@ public interface ICartItemService {
 	public void deleteByMemberAndProduct(Member member,Product product);
 	public int addProductToCart(int quantity,Member member,Product product);
 	public void deleteByMember(Member member);
+	public int countCartItems(Member member);
 }

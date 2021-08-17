@@ -17,7 +17,7 @@
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <!--light-slider-css-->
 <%-- <link rel="stylesheet" type="text/css" href="css/lightslider.css"> --%>
-<link rel="stylesheet" href="css/02.css">
+<!-- <link rel="stylesheet" href="css/02.css"> -->
 <!--jQuery-------->
 <script src="js/jQuery.js"></script>
 <!--light-slider-js-->
@@ -27,6 +27,12 @@
 <!--using-FontAwesome-for-Icons-->
 <script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<!-- Bootstrap -->
+<link rel="stylesheet" href="<c:url value='/webjars/bootstrap/css/bootstrap.min.css'/>">
+<script src="<c:url value='/webjars/bootstrap/js/bootstrap.min.js'/>"></script>
+<style>
+.carousel-item a{display: inline-block;}
+</style>
 </head>
 <body>
     <!--navigation-------------------------------->
@@ -156,25 +162,41 @@
 
     <!--Full-slider--------------------------------------------------------------->
 
-        <div class="wrapper">
-            <ul class="slides">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height: 500px;margin: auto;width: 1000px;" align="center">
+            <ol class="carousel-indicators">
+            	<c:forEach  begin="0" end="${mevents.size()-1}" step="1" var="j" >
+            		<c:choose>
+            			<c:when test="${j==0}">
+            				<li data-target="#carouselExampleIndicators" data-slide-to="${j}" class="active"></li>
+            			</c:when>
+            			<c:otherwise>
+	                    	<li data-target="#carouselExampleIndicators" data-slide-to="${j}"></li>
+	                    </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+            </ol>
+            <div class="carousel-inner">
                 <c:forEach  items="${mevents}" var="mevent" varStatus="i">
-                    <li>
-                    <a herf="<c:url value='/mevent/edm/${mevent.meventid}'/>"><img src="data:image/jpg;base64,${ImgOut().ImgWrite(mevent.meventpicture) }" width="800px"></a>
-                    </li>
+                	<c:choose>
+                		<c:when test="${i.index==0}">
+                			<div class="carousel-item active">
+                		</c:when>
+                		<c:otherwise>
+                   			<div class="carousel-item">
+                   		</c:otherwise>
+                   	</c:choose>
+                    <a href="<c:url value='/mevent/edm/${mevent.meventid}'/>"><img class="d-block w-100 img-fluid" src="data:image/jpg;base64,${ImgOut().ImgWrite(mevent.meventpicture) }" style="object-fit: cover;height:500px;"/></a>
+                   </div>
                 </c:forEach>
-            </ul>
-            <ul class="dot">
-                <c:forEach  begin="1" end="${mevents.size()}" step="1" var="j" >
-                    <li id="${j}"></li>
-                </c:forEach>
-            </ul>
-            <div id="prevSlide" class="slide_btn">
-                <i class="fas fa-caret-left"></i>
-            </div>
-            <div id="nextSlide" class="slide_btn">
-                <i class="fas fa-caret-right"></i>
-            </div>
+			</div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    			<span class="sr-only">Previous</span>
+  			</a>
+  			<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+    			<span class="sr-only">Next</span>
+  			</a>
         </div>
         <script src="js/02.js"></script>
     <!--Feature-Categories-------------------------------->

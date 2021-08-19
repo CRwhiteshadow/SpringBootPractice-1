@@ -71,7 +71,7 @@ public class CheckoutController {
 		case "Card":
 			PaymentMethod paymentMethod2 = PaymentMethod.CREDIT_CARD;
 			Order newOrder = place(request, paymentMethod2);
-			String ecpay = callECPay(newOrder);
+			String ecpay = callECPay(request,newOrder);
 			m.addAttribute("ecpay", ecpay);
 			return "checkout/callecpay";
 		case "Paypal":
@@ -92,10 +92,7 @@ public class CheckoutController {
 		return newOrder;
 	}
 	
-	public String callECPay(Order order) {		
-		try {
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-			String configPath = URLDecoder.decode(classLoader.getResource("log4j.properties").getPath(), "UTF-8");
+	public String callECPay(HttpServletRequest request,Order order) {		
 			String pathString = null;
 			AllInOne all = new AllInOne(pathString);
 			AioCheckOutOneTime domain = new AioCheckOutOneTime();
@@ -109,17 +106,13 @@ public class CheckoutController {
 			domain.setTotalAmount(Integer.toString(order.getTotal()));
 			domain.setTradeDesc("petpet寵物網");
 			domain.setItemName("petpet寵物網商品一批(含運費)共"+order.getTotal()+"元");
-			domain.setReturnURL("http://122.116.73.100/petpettest/ecpayreturn"); //依個人IP位置跟專案更改
-			domain.setOrderResultURL("http://122.116.73.100/petpettest/ecpayclientreturn"); //依個人IP位置跟專案更改
+			domain.setReturnURL(request.getScheme()+"://"+request.getServerName()+request.getContextPath()+"/ecpayreturn"); //依個人IP位置跟專案更改
+			domain.setOrderResultURL(request.getScheme()+"://"+request.getServerName()+request.getContextPath()+"/ecpayclientreturn"); //依個人IP位置跟專案更改
 			String ecpay = all.aioCheckOut(domain, null);
 			
 			order.setEcpayMerchantTradeNo(MerchantTradeNo);
 			orderService.save(order);
-			return ecpay;
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}			
-		return "common/error";		
+			return ecpay;	
 	}
 	
 	@PostMapping("/ecpayclientreturn")

@@ -104,4 +104,19 @@ public class OrderService implements IOrderService {
 		}
 	}
 
+	@Override
+	public int countByEcpayMerchantTradeNoContaining(String ecpayMerchantTradeNo) {
+		return orderRepository.countByEcpayMerchantTradeNoContaining(ecpayMerchantTradeNo);
+	}
+
+	@Override
+	public Order save(Order order) {
+		return orderRepository.save(order);
+	}
+
+	@Override
+	public Order findByEcpayMerchantTradeNo(String ecpayMerchantTradeNo) {
+		return orderRepository.findByEcpayMerchantTradeNo(ecpayMerchantTradeNo);
+	}
+
 }

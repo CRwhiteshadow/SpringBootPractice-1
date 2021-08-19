@@ -31,6 +31,11 @@ public class BasicController {
 	@Autowired private ICartItemService cartItemService;
 	
 	@GetMapping("/")
+	public String root() {
+		return "Login/Login";
+	}
+	
+	@GetMapping("/index")
 	public String showIndex(Model m) {
 		Timestamp time = Timestamp.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		List<MarketingEventBean> mevents = marketingEventService.findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrue(time);
@@ -56,7 +61,12 @@ public class BasicController {
 		Map<Integer , Integer> productdcps = marketingEventService.productdcp(products);
 		m.addAttribute("products", products);
 		m.addAttribute("productdcps", productdcps);
-		return "redirect:/";
+		return "redirect:/index";
+	}
+	
+	@GetMapping("/ecpay")
+	public String showECPayReturn() {
+		return "checkout/ecpay";
 	}
 	
 }

@@ -1,5 +1,8 @@
 package com.example.practice.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.example.practice.model.CartItem;
 import com.example.practice.model.CheckoutInfo;
 import com.example.practice.model.Member;
+import com.example.practice.model.Order;
 import com.example.practice.model.PaymentMethod;
 import com.example.practice.model.Product;
 import com.example.practice.service.ICartItemService;
@@ -22,6 +26,9 @@ import com.example.practice.service.ICheckoutService;
 import com.example.practice.service.IMarketingEventService;
 import com.example.practice.service.IMemberService;
 import com.example.practice.service.IOrderService;
+
+import ecpay.payment.integration.AllInOne;
+import ecpay.payment.integration.domain.AioCheckOutOneTime;
 
 @Controller
 public class CheckoutController {
@@ -54,7 +61,7 @@ public class CheckoutController {
 	}
 	
 	@PostMapping("/place_order")
-	public String placeOrder(HttpServletRequest request) {
+	public String placeOrder(HttpServletRequest request,Model m) {
 		String paymentway = request.getParameter("paymentway");
 		switch(paymentway) {
 		case "COD":
@@ -63,7 +70,10 @@ public class CheckoutController {
 			break;
 		case "Card":
 			PaymentMethod paymentMethod2 = PaymentMethod.CREDIT_CARD;
-			break;
+			Order newOrder = place(request, paymentMethod2);
+			String ecpay = callECPay(newOrder);
+			m.addAttribute("ecpay", ecpay);
+			return "checkout/callecpay";
 		case "Paypal":
 			PaymentMethod paymentMethod3 = PaymentMethod.PayPal;
 			break;
@@ -72,12 +82,48 @@ public class CheckoutController {
 		return "checkout/order_completed";
 	}
 	
-	public void place(HttpServletRequest request,PaymentMethod paymentMethod) {
+	public Order place(HttpServletRequest request,PaymentMethod paymentMethod) {
 		Integer id=(Integer)(request.getSession().getAttribute("memberid"));
 		Member member = memberService.findByMemberid(id);
 		List<CartItem> cartItems = cartItemService.findByMember(member);
 		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(cartItems);
-		orderService.addNewOrder(id, cartItems, paymentMethod, checkoutInfo);
+		Order newOrder = orderService.addNewOrder(id, cartItems, paymentMethod, checkoutInfo);
 		cartItemService.deleteByMember(member);
+		return newOrder;
+	}
+	
+	public String callECPay(Order order) {		
+		try {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			String configPath = URLDecoder.decode(classLoader.getResource("log4j.properties").getPath(), "UTF-8");
+			String pathString = null;
+			AllInOne all = new AllInOne(pathString);
+			AioCheckOutOneTime domain = new AioCheckOutOneTime();
+			String MerchantTradeNo = new SimpleDateFormat("yyyyMMddHHmmss").format(order.getOrdertime()) + "PP";
+			int num = orderService.countByEcpayMerchantTradeNoContaining(MerchantTradeNo);
+			MerchantTradeNo = MerchantTradeNo + (num+1);
+			
+			domain.setMerchantID("2000132");
+			domain.setMerchantTradeNo(MerchantTradeNo);
+			domain.setMerchantTradeDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(order.getOrdertime()));
+			domain.setTotalAmount(Integer.toString(order.getTotal()));
+			domain.setTradeDesc("petpet寵物網");
+			domain.setItemName("petpet寵物網商品一批(含運費)共"+order.getTotal()+"元");
+			domain.setReturnURL("http://122.116.73.100/petpettest/ecpayreturn"); //依個人IP位置跟專案更改
+			domain.setOrderResultURL("http://122.116.73.100/petpettest/ecpayclientreturn"); //依個人IP位置跟專案更改
+			String ecpay = all.aioCheckOut(domain, null);
+			
+			order.setEcpayMerchantTradeNo(MerchantTradeNo);
+			orderService.save(order);
+			return ecpay;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}			
+		return "common/error";		
+	}
+	
+	@PostMapping("/ecpayclientreturn")
+	public String ecpayclientreturn() {
+		return "checkout/order_completed";
 	}
 }

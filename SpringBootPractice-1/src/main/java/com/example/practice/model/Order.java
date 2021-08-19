@@ -15,7 +15,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.springframework.lang.Nullable;
 
 @Entity
 @Table(name = "orders")
@@ -51,6 +54,9 @@ public class Order {
 	
 	@OneToMany(mappedBy ="order",  cascade = {CascadeType.PERSIST, CascadeType.MERGE}  )
 	private Set<OrderDetail> orderDetails = new HashSet<>();
+	
+	@Nullable
+	private String ecpayMerchantTradeNo;
 	
 	public int getId() {
 		return id;
@@ -172,13 +178,21 @@ public class Order {
 		this.orderDetails = orderDetails;
 	}
 	
+	public String getEcpayMerchantTradeNo() {
+		return ecpayMerchantTradeNo;
+	}
+
+	public void setEcpayMerchantTradeNo(String ecpayMerchantTradeNo) {
+		this.ecpayMerchantTradeNo = ecpayMerchantTradeNo;
+	}
+
 	@Override
 	public String toString() {
 		return "OrderBean [id=" + id + ", address=" + address + ", postname=" + postname + ", ordertime="
 				+ ordertime + ", productCost=" + productCost + ", subtotal=" + subtotal + ", tax=" + tax
 				+ ", shippongCost=" + shippongCost + ", total=" + total + ", deliverDate=" + deliverDate
 				+ ", paymentMethod=" + paymentMethod + ", status=" + status + ", member=" + member
-				+ ", orderDetails=" + orderDetails + "]";
+				+ ", orderDetails=" + orderDetails + ", ecpayMerchantTradeNo=" + ecpayMerchantTradeNo +"]";
 	}
 
 }

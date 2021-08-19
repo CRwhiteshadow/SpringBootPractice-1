@@ -16,6 +16,8 @@ public interface IOrderService {
 	public void listOrder();
 	public Page<Order> orderQueryAllPage(int pageNum, String sortField, String sortDir);
 	public Order get(Integer id ) throws NoSuchElementException;
-
+	public int countByEcpayMerchantTradeNoContaining(String ecpayMerchantTradeNo);
+	public Order save(Order order);
+	public Order findByEcpayMerchantTradeNo(String ecpayMerchantTradeNo);
 	
 }

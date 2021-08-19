@@ -8,8 +8,8 @@
 <title>Login</title>
 </head>
 <body>
-<form method="post" action="<c:url value='/login'/>">
-email:<input type="text" name="email" />
+<form method="post" action="<c:url value='/Login'/>">
+email:<input type="text" name="loginEmail" />
 password:<input type="password" name="password" />
 <button type="submit" value="submit">submit</button>
 </form>

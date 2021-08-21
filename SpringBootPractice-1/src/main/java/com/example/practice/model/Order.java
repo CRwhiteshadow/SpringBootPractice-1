@@ -58,6 +58,9 @@ public class Order {
 	@Nullable
 	private String ecpayMerchantTradeNo;
 	
+	@OneToOne
+	private CouponDetail couponDetails;
+	
 	public int getId() {
 		return id;
 	}

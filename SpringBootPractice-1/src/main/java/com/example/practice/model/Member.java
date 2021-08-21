@@ -56,7 +56,8 @@ public class Member implements java.io.Serializable{
 	
 	@Column(name = "PostMobile", nullable = true)
 	private String postmobile;
-
+	
+	
 	public Integer getMemberid() {
 		return memberid;
 	}

@@ -63,7 +63,7 @@
 					<div class="form-group">
 						<label>活動類型:</label>
 						<c:if test="${mevent != null }">
-							<select name="typeid" class="form-control" required>
+							<select name="typeid" class="form-control" required >
 								<c:choose>
 									<c:when test="${mevent.meventtypeid==1 }">
 										<option value="1" selected>會員招募活動</option>
@@ -148,7 +148,7 @@
 						<label>活動圖片:</label>
 						<c:choose>
 							<c:when test="${mevent.meventpicture!=null }">
-								<img id="img0" src="data:image/jpg;base64,${ImgOut().ImgWrite(mevent.meventpicture) }">
+								<img id="img0" src="data:image/jpg;base64,${ImgOut().ImgWrite(mevent.meventpicture) }" style="max-width: 1200px">
 							</c:when>
 							<c:otherwise></c:otherwise>
 						</c:choose> 
@@ -160,10 +160,18 @@
 					<c:if test="${mevent != null}">
 						<input type="hidden" name="ownerid" value="<c:out value='${mevent.meventownerid}' />" />
 					</c:if>	
-					<hr>
-					<div class="form-group">
-						<label>活動商品</label>
-						<c:if test="${mlbean0!=null}">
+					<hr>		
+					<c:if test="${mlbean0!=null && mevent.meventtypeid==1}">
+						<div class="form-group">
+						<label>活動折價券</label>
+						<input type="hidden" name="meventlistid" id="meventlistid" value="<c:out value='${mlbean0.meventlistid}'/>"/>
+						<c:set var="mclbean" value="${mlbean0.marketingEventCouponLists}"/>
+						折價券ID:<input type="text" class="cid" name="coupon_0" id="coupon_0" value="<c:out value='${mclbean.get(0).coupon_id}'/>" />
+						</div>
+					</c:if>	
+					<c:if test="${mlbean0!=null && mevent.meventtypeid==2}">	
+						<div class="form-group">
+							<label>活動商品</label>						
 							<input type="hidden" name="meventlistid" id="meventlistid" value="<c:out value='${mlbean0.meventlistid}'/>"/>						
 							<c:set var="mplbean" value="${mlbean0.marketingEventProductListBean}"/>
 							<c:forEach begin="0" end="1" step="1" var="i">
@@ -189,8 +197,15 @@
 								</div>
 								<br>
 							</c:forEach>
+							</div>
 						</c:if>
 						<c:if test="${mlbean0==null}">
+						<div class="form-group eventcoupon">
+						<label>活動折價券</label>
+						折價券ID:<input type="text" class="cid" name="coupon_0" id="coupon_0" value="" />
+						</div>
+						<div class="form-group eventproduct d-none">
+						<label>活動商品</label>
 						<c:forEach begin="0" end="1" step="1" var="i">
 							<div class="row">
 							<c:forEach begin="1" end="4" step="1" var="j">
@@ -207,8 +222,9 @@
 							</div>
 							<br>
 						</c:forEach>	
+						</div>
 						</c:if>
-					</div>			
+								
 				</div>
 				<div class="modal-footer">
 					<a href="<c:url value='/mevent'/>"><input type="button" class="btn btn-default" data-dismiss="modal" value="取消"></a>

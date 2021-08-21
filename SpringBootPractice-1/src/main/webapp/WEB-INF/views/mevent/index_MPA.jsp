@@ -3,6 +3,7 @@
     import="com.example.practice.customEL.ImgOut"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -88,8 +89,8 @@
 						    </td>
                             <td><c:out value="${mevent.meventname}" /></td>
 						    <td><c:out value="${mevent.meventtypeid}" /></td>
-						    <td><c:out value="${mevent.meventstartdate}" /></td>
-						    <td><c:out value="${mevent.meventenddate}" /></td>
+						    <td><fmt:formatDate value="${mevent.meventstartdate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+						    <td><fmt:formatDate value="${mevent.meventenddate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
 					    	<td><c:out value="${mevent.meventdescription}" /></td>
 					    	<td><c:out value="${mevent.meventonline}" /></td>
 					    	<td><c:choose>

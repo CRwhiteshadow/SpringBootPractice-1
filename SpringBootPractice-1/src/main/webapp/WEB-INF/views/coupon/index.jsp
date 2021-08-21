@@ -3,6 +3,7 @@
     import="com.example.practice.customEL.ImgOut"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -65,6 +66,7 @@
 								    <label for="selectAll"></label>
 							    </span>
 						    </th>
+						    <th>折價券ID</th>
                             <th>折價券名稱</th>
 					    	<th>折價券面額</th>
 					    	<th>可領取結束時間</th>
@@ -89,11 +91,12 @@
 								    <label for="checkbox1"></label>
 						    	</span>
 						    </td>
+						    <td><c:out value="${coupon.id}" /></td>
                             <td><c:out value="${coupon.name}" /></td>
 						    <td><c:out value="${coupon.amount}" /></td>
-						    <td><c:out value="${coupon.enable_time}" /></td>
-						    <td><c:out value="${coupon.start_time}" /></td>
-						    <td><c:out value="${coupon.end_time}" /></td>
+						    <td><fmt:formatDate value="${coupon.enable_time}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+						    <td><fmt:formatDate value="${coupon.start_time}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+						    <td><fmt:formatDate value="${coupon.end_time}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
 					    	<td>
 					    		<c:if test="${coupon.use_type==0}">
 					    			通用

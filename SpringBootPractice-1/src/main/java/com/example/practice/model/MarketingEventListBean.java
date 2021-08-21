@@ -44,6 +44,9 @@ public class MarketingEventListBean implements java.io.Serializable{
 //	@JoinColumn(name="MEVENTLISTID")
 	private List<MarketingEventProductListBean> marketingEventProductListBean;
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<MarketingEventCouponList> marketingEventCouponLists;
+	
 	public Long getMeventlistid() {
 		return meventlistid;
 	}
@@ -68,7 +71,13 @@ public class MarketingEventListBean implements java.io.Serializable{
 	public void setMarketingEventProductListBean(List<MarketingEventProductListBean> marketingEventProductListBean) {
 		this.marketingEventProductListBean = marketingEventProductListBean;
 	}
+	public List<MarketingEventCouponList> getMarketingEventCouponLists() {
+		return marketingEventCouponLists;
+	}
+	public void setMarketingEventCouponLists(List<MarketingEventCouponList> marketingEventCouponLists) {
+		this.marketingEventCouponLists = marketingEventCouponLists;
+	}
 	
-
+	
 	
 }

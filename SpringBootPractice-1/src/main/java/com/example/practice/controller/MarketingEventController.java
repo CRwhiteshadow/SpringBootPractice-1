@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.practice.model.MarketingEventBean;
+import com.example.practice.model.MarketingEventCouponList;
 import com.example.practice.model.MarketingEventListBean;
 import com.example.practice.model.MarketingEventProductListBean;
 import com.example.practice.model.Product;
+import com.example.practice.service.ICouponService;
 import com.example.practice.service.IMarketingEventListService;
 import com.example.practice.service.IMarketingEventService;
 import com.example.practice.service.IProductService;
@@ -35,13 +37,10 @@ import com.example.practice.service.IProductService;
 public class MarketingEventController {
 	private static final int EMPNO=1012;
 	
-	@Autowired
-	private IMarketingEventService marketingEventService;
-	
-	@Autowired
-	private IMarketingEventListService marketingEventListService;
-	
+	@Autowired private IMarketingEventService marketingEventService;
+	@Autowired private IMarketingEventListService marketingEventListService;
 	@Autowired private IProductService productService;
+	@Autowired private ICouponService couponService;
 	
 	@GetMapping("")
 	public String showForm(Model m) {
@@ -96,28 +95,55 @@ public class MarketingEventController {
         mevent.setMeventownerid(ownerid);
         mevent.setMeventonline(online);	
         marketingEventService.save(mevent);
-        MarketingEventListBean mEventListBean = new MarketingEventListBean();
-        mEventListBean.setMeventid(mevent.getMeventid());
-        mEventListBean.setMeventlisttypeid(Long.parseLong("1"));
-        List<MarketingEventListBean> mEventListBeans = new ArrayList<MarketingEventListBean>();
-        mEventListBeans.add(mEventListBean);
-        mevent.setMarketingEventListBean(mEventListBeans);
-        marketingEventService.save(mevent);
-        mEventListBean = marketingEventListService.findById(mevent.getMarketingEventListBean().get(0).getMeventlistid());
-        List<MarketingEventProductListBean> mEventPListBeans = new ArrayList<MarketingEventProductListBean>();
-        for(int i=1;i<=8;i++) {
-			if(request.getParameter("product_"+i)!=null) {
-		        MarketingEventProductListBean mEventPListBean = new MarketingEventProductListBean();
-				mEventPListBean.setMeventlistid(mEventListBean.getMeventlistid());
-				mEventPListBean.setProductid(Integer.parseInt(request.getParameter("product_"+i).trim()));
-				if(!request.getParameter("productdcp_"+i).isEmpty()){
-					mEventPListBean.setMeventproductdiscountprice(Integer.parseInt(request.getParameter("productdcp_"+i).trim()));
-				}	
-				mEventPListBeans.add(mEventPListBean);       
+        switch (request.getParameter("typeid")) {
+		case "1":
+			if(!request.getParameter("coupon_0").isBlank()) {
+				MarketingEventListBean mEventListBean = new MarketingEventListBean();
+		        mEventListBean.setMeventid(mevent.getMeventid());
+		        mEventListBean.setMeventlisttypeid(Long.parseLong("3"));
+		        List<MarketingEventListBean> mEventListBeans = new ArrayList<MarketingEventListBean>();
+		        mEventListBeans.add(mEventListBean);
+		        mevent.setMarketingEventListBean(mEventListBeans);
+		        marketingEventService.save(mevent);
+		        mEventListBean = marketingEventListService.findById(mevent.getMarketingEventListBean().get(0).getMeventlistid());
+		        List<MarketingEventCouponList> mEventCLists = new ArrayList<MarketingEventCouponList>();
+		        MarketingEventCouponList mEventClist = new MarketingEventCouponList();
+		        mEventClist.setMeventlist_id(mEventListBean.getMeventlistid());;
+		        mEventClist.setCoupon_id(Long.parseLong(request.getParameter("coupon_0")));;
+		        mEventCLists.add(mEventClist);
+		        mEventListBean.setMarketingEventCouponLists(mEventCLists);
+		        marketingEventListService.save(mEventListBean);
 			}
+			break;
+
+		case "2":
+			MarketingEventListBean mEventListBean = new MarketingEventListBean();
+	        mEventListBean.setMeventid(mevent.getMeventid());
+	        mEventListBean.setMeventlisttypeid(Long.parseLong("1"));
+	        List<MarketingEventListBean> mEventListBeans = new ArrayList<MarketingEventListBean>();
+	        mEventListBeans.add(mEventListBean);
+	        mevent.setMarketingEventListBean(mEventListBeans);
+	        marketingEventService.save(mevent);
+	        mEventListBean = marketingEventListService.findById(mevent.getMarketingEventListBean().get(0).getMeventlistid());
+	        List<MarketingEventProductListBean> mEventPListBeans = new ArrayList<MarketingEventProductListBean>();
+	        for(int i=1;i<=8;i++) {
+				if(!request.getParameter("product_"+i).isBlank()) {
+			        MarketingEventProductListBean mEventPListBean = new MarketingEventProductListBean();
+					mEventPListBean.setMeventlistid(mEventListBean.getMeventlistid());
+					mEventPListBean.setProductid(Integer.parseInt(request.getParameter("product_"+i).trim()));
+					if(!request.getParameter("productdcp_"+i).isEmpty()){
+						mEventPListBean.setMeventproductdiscountprice(Integer.parseInt(request.getParameter("productdcp_"+i).trim()));
+					}	
+					mEventPListBeans.add(mEventPListBean);       
+				}
+			}
+	        mEventListBean.setMarketingEventProductListBean(mEventPListBeans);
+	        marketingEventListService.save(mEventListBean);
+			break;
+		default:
+			break;
 		}
-        mEventListBean.setMarketingEventProductListBean(mEventPListBeans);
-        marketingEventListService.save(mEventListBean);
+        
         return "redirect:/mevent";
 	}
 	
@@ -134,45 +160,88 @@ public class MarketingEventController {
 		Timestamp enddate = Timestamp.valueOf(request.getParameter("enddate")+" "+request.getParameter("endtime"));
 		String name = request.getParameter("name").trim();
 		String description = request.getParameter("description").trim();
-		MarketingEventBean mevent = new MarketingEventBean();
-        mevent.setMeventid(id);
-        mevent.setMeventtitle(title);
-        if(pic.isEmpty()) {
-        	if(marketingEventService.findById(id).getMeventpicture()==null) {mevent.setMeventpicture(null);
-        	}else{mevent.setMeventpicture(marketingEventService.findById(id).getMeventpicture());}
-        }else {try {
-			mevent.setMeventpicture(pic.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}}
-        if(pic.isEmpty()) {
-        	if(marketingEventService.findById(id).getMeventpicturename()==null) {mevent.setMeventpicturename(null);
-        	}else{mevent.setMeventpicturename(marketingEventService.findById(id).getMeventpicturename());}
-        }else {
-			mevent.setMeventpicturename(pic.getOriginalFilename());
+		switch (request.getParameter("typeid")) {
+		case "1":
+			MarketingEventBean mevent1 = marketingEventService.findById(id);
+			mevent1.setMeventtitle(title);
+			if(pic.isEmpty()) {
+				if(marketingEventService.findById(id).getMeventpicture()==null) {mevent1.setMeventpicture(null);
+	        	}else{mevent1.setMeventpicture(marketingEventService.findById(id).getMeventpicture());}
+	        }else {try {
+				mevent1.setMeventpicture(pic.getBytes());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}}
+			if(pic.isEmpty()) {
+	        	if(marketingEventService.findById(id).getMeventpicturename()==null) {mevent1.setMeventpicturename(null);
+	        	}else{mevent1.setMeventpicturename(marketingEventService.findById(id).getMeventpicturename());}
+	        }else {
+				mevent1.setMeventpicturename(pic.getOriginalFilename());
+			}
+	        mevent1.setMeventstartdate(startdate);
+	        mevent1.setMeventenddate(enddate);
+	        mevent1.setMeventname(name);
+	        mevent1.setMeventdescription(description);
+	        mevent1.setMeventtypeid(typeid);
+	        mevent1.setMeventownerid(ownerid);
+	        mevent1.setMeventonline(online);
+	        List<MarketingEventListBean> mEventListBeans1 = marketingEventService.findById(id).getMarketingEventListBean();
+	        MarketingEventListBean mEventListBean1 = marketingEventListService.findById(meventlistid);
+	        List<MarketingEventCouponList> mEventCLists = mEventListBean1.getMarketingEventCouponLists();
+	        MarketingEventCouponList mEventCList = mEventCLists.get(0);
+        	mEventCList.setCoupon_id(Long.parseLong(request.getParameter("coupon_0")));
+        	mEventListBean1.setMarketingEventCouponLists(mEventCLists);
+        	mEventListBeans1.set(0, mEventListBean1);
+        	mevent1.setMarketingEventListBean(mEventListBeans1);
+	        marketingEventService.save(mevent1);
+			break;
+			
+		case "2":
+			MarketingEventBean mevent = new MarketingEventBean();
+	        mevent.setMeventid(id);
+	        mevent.setMeventtitle(title);
+	        if(pic.isEmpty()) {
+	        	if(marketingEventService.findById(id).getMeventpicture()==null) {mevent.setMeventpicture(null);
+	        	}else{mevent.setMeventpicture(marketingEventService.findById(id).getMeventpicture());}
+	        }else {try {
+				mevent.setMeventpicture(pic.getBytes());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}}
+	        if(pic.isEmpty()) {
+	        	if(marketingEventService.findById(id).getMeventpicturename()==null) {mevent.setMeventpicturename(null);
+	        	}else{mevent.setMeventpicturename(marketingEventService.findById(id).getMeventpicturename());}
+	        }else {
+				mevent.setMeventpicturename(pic.getOriginalFilename());
+			}
+	        mevent.setMeventstartdate(startdate);
+	        mevent.setMeventenddate(enddate);
+	        mevent.setMeventname(name);
+	        mevent.setMeventdescription(description);
+	        mevent.setMeventtypeid(typeid);
+	        mevent.setMeventownerid(ownerid);
+	        mevent.setMeventonline(online);
+	        List<MarketingEventListBean> mEventListBeans = marketingEventService.findById(id).getMarketingEventListBean();
+	        MarketingEventListBean mEventListBean = marketingEventListService.findById(meventlistid);
+	        List<MarketingEventProductListBean> mEventPListBeans = mEventListBean.getMarketingEventProductListBean();
+	        for(int i=0;i<mEventPListBeans.size();i++) {
+	        	MarketingEventProductListBean mEventPListBean = mEventPListBeans.get(i);
+	        	mEventPListBean.setProductid(Integer.parseInt(request.getParameter("product_"+(i+1)).trim()));
+				if(!request.getParameter("productdcp_"+(i+1)).isBlank()){
+					mEventPListBean.setMeventproductdiscountprice(Integer.parseInt(request.getParameter("productdcp_"+(i+1)).trim()));
+				}	
+	        	mEventPListBeans.set(i, mEventPListBean);
+	        }
+	        mEventListBean.setMarketingEventProductListBean(mEventPListBeans);
+	        mEventListBeans.set(0, mEventListBean);
+	        mevent.setMarketingEventListBean(mEventListBeans);
+	        marketingEventService.save(mevent);
+			break;
+
+		default:
+			break;
 		}
-        mevent.setMeventstartdate(startdate);
-        mevent.setMeventenddate(enddate);
-        mevent.setMeventname(name);
-        mevent.setMeventdescription(description);
-        mevent.setMeventtypeid(typeid);
-        mevent.setMeventownerid(ownerid);
-        mevent.setMeventonline(online);
-        List<MarketingEventListBean> mEventListBeans = marketingEventService.findById(id).getMarketingEventListBean();
-        MarketingEventListBean mEventListBean = marketingEventListService.findById(meventlistid);
-        List<MarketingEventProductListBean> mEventPListBeans = mEventListBean.getMarketingEventProductListBean();
-        for(int i=0;i<mEventPListBeans.size();i++) {
-        	MarketingEventProductListBean mEventPListBean = mEventPListBeans.get(i);
-        	mEventPListBean.setProductid(Integer.parseInt(request.getParameter("product_"+(i+1)).trim()));
-			if(!request.getParameter("productdcp_"+(i+1)).isEmpty()){
-				mEventPListBean.setMeventproductdiscountprice(Integer.parseInt(request.getParameter("productdcp_"+(i+1)).trim()));
-			}	
-        	mEventPListBeans.set(i, mEventPListBean);
-        }
-        mEventListBean.setMarketingEventProductListBean(mEventPListBeans);
-        mEventListBeans.set(0, mEventListBean);
-        mevent.setMarketingEventListBean(mEventListBeans);
-        marketingEventService.save(mevent);
+		       
 		return "redirect:/mevent";
 	}
 

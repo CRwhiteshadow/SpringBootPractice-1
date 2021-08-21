@@ -8,6 +8,25 @@ $("input[type='time']").blur(check);
 $("#btn").click(submit);
 
 $(document).ready(function(){
+	var typeid=$("select[name='typeid']").val();
+	$("select[name='typeid']").on("change",function(){
+		typeid=$(this).val();
+		if(typeid==2){
+			$(".eventproduct").removeClass("d-none");
+			$(".eventcoupon").addClass("d-none");
+		}
+		if(typeid==3||typeid==4){
+			$(".eventproduct").addClass("d-none");
+			$(".eventcoupon").addClass("d-none");
+		}
+		if(typeid==1){
+			$(".eventproduct").addClass("d-none");
+			$(".eventcoupon").removeClass("d-none");
+		}
+	});
+});
+
+$(document).ready(function(){
 	$(document).on('keydown','.pid',function(){
 		var id = this.id;
 		var splitid = id.split('_');

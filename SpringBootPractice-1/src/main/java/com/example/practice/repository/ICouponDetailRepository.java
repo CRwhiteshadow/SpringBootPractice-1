@@ -15,5 +15,7 @@ public interface ICouponDetailRepository extends JpaRepository<CouponDetail, Lon
 	public List<CouponDetail> findByMember(Member member);
 	
 	public CouponDetail findByCode(String code);
+	
+	public List<CouponDetail> findByCoupon(Coupon coupon);
 
 }

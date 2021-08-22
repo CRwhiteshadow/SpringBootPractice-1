@@ -59,4 +59,9 @@ public class CouponDetailService implements ICouponDetailService{
 		}
 	}
 
+	@Override
+	public List<CouponDetail> findByCoupon(Coupon coupon) {
+		return repo.findByCoupon(coupon);
+	}
+
 }

@@ -14,6 +14,7 @@ public interface ICouponDetailService {
 	public void delete(CouponDetail couponDetail);
 	public boolean isReceived(Member member,Coupon coupon);
 	public boolean checkCode(String code);
+	public List<CouponDetail> findByCoupon(Coupon coupon);
 	
 
 }

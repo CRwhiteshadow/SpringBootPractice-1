@@ -53,6 +53,15 @@ public class CouponController {
 		return "coupon/Form";
 	}
 	
+	@GetMapping("/get/{id}")
+	public String getDetail(@PathVariable("id") Long id,Model m) {
+		Coupon coupon = couponService.findById(id);
+		List<CouponDetail> couponDetails = couponDetailService.findByCoupon(coupon);
+		m.addAttribute("coupon", coupon);
+		m.addAttribute("couponDetails", couponDetails);
+		return "coupon/detail";
+	}
+	
 	@GetMapping(value="/rest/find/{id}",produces=MimeTypeUtils.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Coupon> find(@PathVariable("id") Long id){
 		try {

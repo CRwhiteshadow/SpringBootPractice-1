@@ -1,7 +1,9 @@
 package com.example.practice.controller;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.practice.model.Coupon;
+import com.example.practice.model.CouponDetail;
 import com.example.practice.service.ICouponDetailService;
 import com.example.practice.service.ICouponService;
+import com.example.practice.service.IMemberService;
 
 @Controller
 @RequestMapping("/bs/coupon")
@@ -28,6 +32,7 @@ public class CouponController {
 	
 	@Autowired private ICouponService couponService;
 	@Autowired private ICouponDetailService couponDetailService;
+	@Autowired private IMemberService memberService;
 	
 	@GetMapping("")
 	public String showForm(Model m) {
@@ -55,6 +60,65 @@ public class CouponController {
 		} catch (Exception e) {
 			return new ResponseEntity<Coupon>(HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@GetMapping(value = "/rest/isReceived/{memberid}/{couponid}")
+	public ResponseEntity<Boolean> isReceived(@PathVariable("memberid") Integer memberid
+											 ,@PathVariable("couponid") Long couponid){
+		try {
+			return new ResponseEntity<Boolean>(couponDetailService.isReceived(memberService.findByMemberid(memberid), couponService.findById(couponid)),HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
+	@PostMapping(value = "/rest/receive/{memberid}/{couponid}")
+	public ResponseEntity<String> receiveCoupon(@PathVariable("memberid") Integer memberid
+											   ,@PathVariable("couponid") Long couponid){
+		try {
+			Coupon coupon = couponService.findById(couponid);
+			Timestamp create_time = Timestamp.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			if(create_time.after(coupon.getEnable_time())) {
+				return new ResponseEntity<String>("已過可領取時間",HttpStatus.OK);
+			}else {
+				CouponDetail couponDetail = new CouponDetail();
+				couponDetail.setMember(memberService.findByMemberid(memberid));
+				couponDetail.setCoupon(coupon);			
+				couponDetail.setCreate_time(create_time);
+				couponDetail.setGet_type(1);
+				couponDetail.setUse_status(0);
+				String code = couponCodeGen();
+				while(couponDetailService.checkCode(code)) {
+					code = couponCodeGen();
+				}
+				couponDetail.setCode(code);
+				couponDetailService.save(couponDetail);
+				coupon.setPublish_count(coupon.getPublish_count()+1);
+				coupon.setReceive_count(coupon.getReceive_count()+1);
+				couponService.save(coupon);
+				return new ResponseEntity<String>("已經折價券歸戶",HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	public String couponCodeGen() {
+		char[] chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789".toCharArray();
+		long max=100000000000000L;
+		long random=(long) (Math.random()*max);	
+		StringBuffer sb=new StringBuffer();
+		
+		while (random>0)
+		{
+			sb.append(chars[(int)(random % chars.length)]);
+			random /= chars.length;
+		}
+
+		String couponCode=sb.toString();
+		
+		return couponCode;
 	}
 	
 	@PostMapping("/insert")

@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "marketingeventcouponlist")
@@ -29,6 +30,7 @@ public class MarketingEventCouponList implements java.io.Serializable{
 	private MarketingEventListBean marketingEventListBean;
 	private Long meventlist_id;
 	
+	@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 	@ManyToOne(targetEntity = Coupon.class,fetch = FetchType.LAZY,optional = false)
 	@JoinColumn(name = "coupon_id",insertable = false,updatable = false)
 	private Coupon coupon;

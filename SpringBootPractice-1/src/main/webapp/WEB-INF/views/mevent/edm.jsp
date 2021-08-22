@@ -38,6 +38,25 @@
 	<div class="row m-1">
 		&nbsp;
 	</div>
+	<c:if test="${mevent.meventtypeid==1}">
+	<div class="row border border-success rounded"  style="max-width: 1600px;">
+		<div class="card col">
+			<div class="card-header">
+				<h1>活動辦法</h1>
+			</div>
+			<div class="card-body">
+				<div style="margin:20px;text-align: left;">
+					<p>${mevent.meventdescription }</p>
+				</div>
+			</div>
+			<div class="card-footer">
+				<input type="hidden" id="couponid" value="${mevent.marketingEventListBean.get(0).marketingEventCouponLists.get(0).coupon_id }"/>
+				<a class="btn btn-success coupon">按我領券</a>
+			</div>
+		</div>
+	</div>
+	</c:if>
+	<c:if test="${mevent.meventtypeid==2}">
 	<div>
 		<c:set var="psize" value="${mevent.marketingEventListBean.get(0).marketingEventProductListBean.size()}"/>
 		<c:set value="${mevent.marketingEventListBean.get(0).marketingEventProductListBean }" var="meplbean"/>
@@ -76,7 +95,7 @@
 
 
 	</div>
-
+	</c:if>
 </div>
 
 <%@include file="../common/footer.jsp" %>
@@ -106,6 +125,48 @@ $(".btn-primary").on("click",function(){
 		}).done(function(response){
 			alert(response);
 			});
-})
+});
+
+/* 領券判斷 */
+$(document).ready(function(){	
+	var couponid = $("#couponid").val();
+	var context =window.location.pathname.split("/")[1];
+	var memberid = <c:out value='${sessionScope.memberid}'/>
+		console.log(memberid);
+		console.log(couponid);
+		if(typeof(memberid)=='undefined'){
+			$(".coupon").empty().text("加入會員");	
+			$(".coupon").on("click",function(e){
+				e.preventDefault();
+				window.location.assign("<c:url value='/lock/MemberCenter'/>");
+				});		
+			}else{
+				var uri1 = "/"+context+"/bs/coupon/rest/isReceived/"+memberid+"/"+couponid;
+				$.ajax({
+					type:"get",
+					url:uri1,
+					}).done(function(response){
+						console.log(response);
+						if(response==false){
+							$(".coupon").on("click",function(e){
+								var uri2 = "/"+context+"/bs/coupon/rest/receive/"+memberid+"/"+couponid;
+								e.preventDefault();
+								$.ajax({
+									type:"post",
+									url:uri2,
+									}).done(function(response){
+										alert(response);
+										$("#couponid").after("<p style='color:red;'>已領取過</p>");
+										$(".coupon").remove();
+										
+										});
+							});
+						}else {
+							$("#couponid").after("<p style='color:red;'>已領取過</p>");
+							$(".coupon").remove();
+						}
+				});
+			}
+});
 </script>
 </html>

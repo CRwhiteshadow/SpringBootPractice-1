@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "coupondetail")
 public class CouponDetail {
@@ -22,6 +24,7 @@ public class CouponDetail {
 	@JoinColumn(name = "member_id")
 	private Member member;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "coupon_id")
 	private Coupon coupon;

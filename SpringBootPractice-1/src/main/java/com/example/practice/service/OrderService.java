@@ -1,5 +1,7 @@
 package com.example.practice.service;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.practice.model.CartItem;
 import com.example.practice.model.CheckoutInfo;
+import com.example.practice.model.Coupon;
+import com.example.practice.model.CouponDetail;
 import com.example.practice.model.Order;
 import com.example.practice.model.OrderDetail;
 import com.example.practice.model.OrderStatus;
@@ -32,10 +36,13 @@ public class OrderService implements IOrderService {
 	@Autowired private IOrderRepository orderRepository;
 	@Autowired private IMemberService memberService;
 	@Autowired private IMarketingEventService meventService;
+	@Autowired private ICouponService couponService;
+	@Autowired private ICouponDetailService couponDetailService;
 	private static final int SHIPPINGCOSTPERITEM =30; //每一項商品的運費
 
 	@Override
-	public Order addNewOrder(Integer memberid,List<CartItem> cartItems,PaymentMethod paymentMethod,CheckoutInfo checkoutInfo) {
+	public Order addNewOrder(Integer memberid,List<CartItem> cartItems,PaymentMethod paymentMethod,
+							 CheckoutInfo checkoutInfo,Long couponDetailId) {
 		Order newOreder = new Order();
 		newOreder.setOrdertime(new Date());
 		newOreder.setStatus(OrderStatus.NEW);
@@ -72,6 +79,22 @@ public class OrderService implements IOrderService {
 			orderDetail.setSubtotal(orderDetail.getUnitPrice() * cartItems.get(i).getQuantity());
 			orderDetail.setShippongCost(SHIPPINGCOSTPERITEM);
 			orderDetails.add(orderDetail);
+		}
+		
+		if(couponDetailId==0L) {	
+		}else {
+			newOreder = orderRepository.save(newOreder);
+			CouponDetail couponDetail = couponDetailService.findById(couponDetailId);
+			couponDetail.setUse_status(1);
+			couponDetail.setUse_time(Timestamp.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())));
+			couponDetail.setOrder(newOreder);
+			Coupon coupon = couponDetail.getCoupon();
+			coupon.setUse_count(coupon.getUse_count()+1);
+			couponService.save(coupon);
+			couponDetailService.save(couponDetail);
+			newOreder.setCouponAmount(coupon.getAmount());
+			newOreder.setCouponDetails(couponDetail);
+			newOreder.setTotal(newOreder.getTotal()-coupon.getAmount());
 		}
 		
 		return orderRepository.save(newOreder);

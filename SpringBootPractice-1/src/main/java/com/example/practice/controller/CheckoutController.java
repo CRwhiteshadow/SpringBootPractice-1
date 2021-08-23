@@ -25,6 +25,7 @@ import com.example.practice.model.Product;
 import com.example.practice.service.ICartItemService;
 import com.example.practice.service.ICheckoutService;
 import com.example.practice.service.ICouponDetailService;
+import com.example.practice.service.ICouponService;
 import com.example.practice.service.IMarketingEventService;
 import com.example.practice.service.IMemberService;
 import com.example.practice.service.IOrderService;
@@ -89,10 +90,11 @@ public class CheckoutController {
 	
 	public Order place(HttpServletRequest request,PaymentMethod paymentMethod) {
 		Integer id=(Integer)(request.getSession().getAttribute("memberid"));
+		Long couponDetailId = Long.parseLong(request.getParameter("coupon"));
 		Member member = memberService.findByMemberid(id);
 		List<CartItem> cartItems = cartItemService.findByMember(member);
 		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(cartItems);
-		Order newOrder = orderService.addNewOrder(id, cartItems, paymentMethod, checkoutInfo);
+		Order newOrder = orderService.addNewOrder(id, cartItems, paymentMethod, checkoutInfo,couponDetailId);
 		cartItemService.deleteByMember(member);
 		return newOrder;
 	}

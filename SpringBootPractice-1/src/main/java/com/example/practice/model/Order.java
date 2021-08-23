@@ -38,7 +38,8 @@ public class Order {
 	private int subtotal;
 	private int tax;
 	private int shippongCost;
-	
+	@Nullable
+	private int couponAmount;
 	private int total;
 	private  Date deliverDate;
 	
@@ -60,6 +61,8 @@ public class Order {
 	
 	@OneToOne
 	private CouponDetail couponDetails;
+	
+
 	
 	public int getId() {
 		return id;
@@ -187,6 +190,22 @@ public class Order {
 
 	public void setEcpayMerchantTradeNo(String ecpayMerchantTradeNo) {
 		this.ecpayMerchantTradeNo = ecpayMerchantTradeNo;
+	}	
+	
+	public CouponDetail getCouponDetails() {
+		return couponDetails;
+	}
+
+	public void setCouponDetails(CouponDetail couponDetails) {
+		this.couponDetails = couponDetails;
+	}
+
+	public int getCouponAmount() {
+		return couponAmount;
+	}
+
+	public void setCouponAmount(int couponAmount) {
+		this.couponAmount = couponAmount;
 	}
 
 	@Override
@@ -195,7 +214,8 @@ public class Order {
 				+ ordertime + ", productCost=" + productCost + ", subtotal=" + subtotal + ", tax=" + tax
 				+ ", shippongCost=" + shippongCost + ", total=" + total + ", deliverDate=" + deliverDate
 				+ ", paymentMethod=" + paymentMethod + ", status=" + status + ", member=" + member
-				+ ", orderDetails=" + orderDetails + ", ecpayMerchantTradeNo=" + ecpayMerchantTradeNo +"]";
+				+ ", orderDetails=" + orderDetails + ", ecpayMerchantTradeNo=" + ecpayMerchantTradeNo 
+				+ ", couponDetails=" + couponDetails + ", couponAmount=" + couponAmount +"]";
 	}
 
 }

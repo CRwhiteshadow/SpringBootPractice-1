@@ -31,6 +31,7 @@
   <a href="#" id="a_member">會員管理</a>
   <a href="#" id="a_product">商品管理</a>
   <a href="<c:url value='/mevent'/>" id="a_mevent">線上行銷活動管理</a>
+  <a href="<c:url value='//bs/coupon'/>" id="a_coupon">折價券管理</a>
   <a href="#" id="a_event">線下活動管理</a>
   <a href="#" id="a_forum">論壇管理</a>
   <a href="#" id="a_">認養管理</a>
@@ -166,7 +167,22 @@
 						<label>活動折價券</label>
 						<input type="hidden" name="meventlistid" id="meventlistid" value="<c:out value='${mlbean0.meventlistid}'/>"/>
 						<c:set var="mclbean" value="${mlbean0.marketingEventCouponLists}"/>
+						<br>
 						折價券ID:<input type="text" class="cid" name="coupon_0" id="coupon_0" value="<c:out value='${mclbean.get(0).coupon_id}'/>" />
+						<br>
+						折價券名稱:<input type="text" id="coupon_name_0" readonly value="<c:out value='${mclbean.get(0).coupon.name}'/>"/>
+						<br>
+						折價券面額:<input type="text" id="coupon_amount_0" readonly value="<c:out value='${mclbean.get(0).coupon.amount}'/>"/>
+						<br>
+						可獲取時間:<input type="text" id="coupon_enable_time_0" readonly value="<c:out value='${mclbean.get(0).coupon.enable_time}'/>"/>
+						<br>
+						可使用開始時間:<input type="text" id="coupon_start_time_0" readonly  value="<c:out value='${mclbean.get(0).coupon.start_time}'/>"/>
+						<br>
+						可使用結束時間:<input type="text" id="coupon_end_time_0" readonly value="<c:out value='${mclbean.get(0).coupon.end_time}'/>"/>
+						<br>
+						每人限領張數:<input type="text" id="coupon_per_limit_0" readonly value="<c:out value='${mclbean.get(0).coupon.per_limit}'/>"/>
+						<br>
+						使用門檻:滿<input type="text" id="coupon_min_point_0" readonly value="<c:out value='${mclbean.get(0).coupon.min_point}'/>"/>元
 						</div>
 					</c:if>	
 					<c:if test="${mlbean0!=null && mevent.meventtypeid==2}">	
@@ -202,7 +218,23 @@
 						<c:if test="${mlbean0==null}">
 						<div class="form-group eventcoupon">
 						<label>活動折價券</label>
+						<br>
 						折價券ID:<input type="text" class="cid" name="coupon_0" id="coupon_0" value="" />
+						<br>
+						折價券名稱:<input type="text" id="coupon_name_0" readonly/>
+						<br>
+						折價券面額:<input type="text" id="coupon_amount_0" readonly/>
+						<br>
+						可獲取時間:<input type="text" id="coupon_enable_time_0" readonly/>
+						<br>
+						可使用開始時間:<input type="text" id="coupon_start_time_0" readonly/>
+						<br>
+						可使用結束時間:<input type="text" id="coupon_end_time_0" readonly/>
+						<br>
+						每人限領張數:<input type="text" id="coupon_per_limit_0" readonly/>
+						<br>
+						使用門檻:滿<input type="text" id="coupon_min_point_0" readonly/>元
+						
 						</div>
 						<div class="form-group eventproduct d-none">
 						<label>活動商品</label>

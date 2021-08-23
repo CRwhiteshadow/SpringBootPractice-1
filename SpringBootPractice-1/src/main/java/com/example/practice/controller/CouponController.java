@@ -62,6 +62,16 @@ public class CouponController {
 		return "coupon/detail";
 	}
 	
+	@GetMapping(value = "/rest/findAll",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+	public ResponseEntity <List<Coupon>> findAll(){
+		try {
+			Timestamp now = Timestamp.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			return new ResponseEntity<List<Coupon>>(couponService.findByEnableTimeAfter(now),HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<List<Coupon>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@GetMapping(value="/rest/find/{id}",produces=MimeTypeUtils.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Coupon> find(@PathVariable("id") Long id){
 		try {

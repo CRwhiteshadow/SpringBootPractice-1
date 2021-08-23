@@ -31,6 +31,7 @@
   <a href="#" id="a_member">會員管理</a>
   <a href="#" id="a_product">商品管理</a>
   <a href="<c:url value='/mevent'/>" id="a_mevent">線上行銷活動管理</a>
+  <a href="<c:url value='//bs/coupon'/>" id="a_coupon">折價券管理</a>
   <a href="#" id="a_event">線下活動管理</a>
   <a href="#" id="a_forum">論壇管理</a>
   <a href="#" id="a_">認養管理</a>

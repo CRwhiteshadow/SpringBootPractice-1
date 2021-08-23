@@ -68,6 +68,63 @@ $(document).ready(function(){
 	})
 })
 
+$(document).ready(function(){
+	$(document).on('keydown','.cid',function(){
+		var id = this.id;
+		var splitid = id.split('_');
+ 		var index = splitid[1];
+	
+	$("#"+id).autocomplete({
+	source:function(request,response){
+		var context =window.location.pathname.split("/")[1];
+		var uri="/"+context+"/bs/coupon/rest/findAll";
+		$.ajax({
+			url:uri,
+			type:"get",
+			dataType:"json",
+			data:{
+				"query":request.term
+			},
+			success:function(data){
+				response($.map(data,function(item){
+					return{
+						label:item.id,
+						value:item.id.value,
+						name:item.name,
+						amount:item.amount,
+						start_time:item.start_time,
+						end_time:item.end_time,
+						enable_time:item.enable_time,
+						per_limit:item.per_limit,
+						min_point:item.min_point
+					}
+				}));
+			}
+		});
+	},
+	select:function(event,ui){
+		$(this).val(ui.item);
+		$(this).val(ui.item.value);
+		var cname = ui.item.name;
+		var camount = ui.item.amount;
+		var cstart_time = ui.item.start_time;
+		var cend_time = ui.item.end_time;
+		var cenable_time = ui.item.enable_time;
+		var cper_limit = ui.item.per_limit;
+		var cmin_point = ui.item.min_point;
+		
+		document.getElementById("coupon_name_"+index).value=cname;
+		document.getElementById("coupon_amount_"+index).value=camount;
+		document.getElementById("coupon_enable_time_"+index).value=cenable_time;
+		document.getElementById("coupon_start_time_"+index).value=cstart_time;
+		document.getElementById("coupon_end_time_"+index).value=cend_time;
+		document.getElementById("coupon_per_limit_"+index).value=cper_limit;
+		document.getElementById("coupon_min_point_"+index).value=cmin_point;
+		return false;
+	}
+});
+	})
+})
 
 // $(function(){
 // 	var context =window.location.pathname.split("/")[1];

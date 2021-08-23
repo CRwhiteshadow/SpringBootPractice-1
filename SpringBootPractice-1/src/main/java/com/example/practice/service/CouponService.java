@@ -1,5 +1,6 @@
 package com.example.practice.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -41,6 +42,11 @@ public class CouponService implements ICouponService {
 	public void deleteAllById(List<Long> couponids) {
 		couponRepository.deleteAllById(couponids);
 		
+	}
+
+	@Override
+	public List<Coupon> findByEnableTimeAfter(Timestamp timestamp) {
+		return couponRepository.findByEnableTimeAfter(timestamp);
 	}
 
 }

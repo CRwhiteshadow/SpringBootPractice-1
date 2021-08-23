@@ -11,12 +11,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "coupons")
-public class Coupon {
+public class Coupon  implements java.io.Serializable {
+
+	@Transient
+	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -47,7 +52,7 @@ public class Coupon {
 	private Timestamp enable_time; //可領取日期
 	
 
-	
+	@JsonIgnore
 	@OneToMany(mappedBy = "coupon",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	private Set<CouponDetail> couponDetails;
 	

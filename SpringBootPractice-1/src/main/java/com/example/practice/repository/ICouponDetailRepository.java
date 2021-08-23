@@ -19,7 +19,7 @@ public interface ICouponDetailRepository extends JpaRepository<CouponDetail, Lon
 	
 	public List<CouponDetail> findByCoupon(Coupon coupon);
 	
-	@Query("select c from CouponDetail c where c.member=?1 and c.use_status=?2")
-	public List<CouponDetail> findByMemberAndUseStatus(Member member,int use_status);
+	@Query("select cd from CouponDetail cd join Coupon c on cd.coupon = c where cd.member=?1 and cd.use_status=?2 and (c.min_point<?3 or c.min_point=0)")
+	public List<CouponDetail> findByMemberAndUseStatus(Member member,int use_status,int productTotal);
 
 }

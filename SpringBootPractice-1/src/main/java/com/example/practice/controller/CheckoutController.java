@@ -54,7 +54,7 @@ public class CheckoutController {
 		}
 		Map<Integer , Integer> productdcps = marketingEventService.productdcp(products);
 		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(cartItems);
-		List<CouponDetail> couponDetails = couponDetailService.findByMemberAndUseStatus(member, 0);
+		List<CouponDetail> couponDetails = couponDetailService.findByMemberAndUseStatus(member, 0,checkoutInfo.getPaymentTotal());
 		m.addAttribute("cartItems", cartItems);
 		m.addAttribute("productdcps", productdcps);
 		m.addAttribute("checkoutInfo", checkoutInfo);

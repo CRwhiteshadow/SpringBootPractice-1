@@ -64,29 +64,35 @@
       				</p>
       			</div>
       		</div>
+      		<form method="post" action="<c:url value='/place_order'/>">
       		<c:if test="${couponDetails.size()!=0 }">
       		<div class="card">
       			<div class="card-header"><h5>折價券選擇</h5></div>
       			<div class="card-body">
       				<c:forEach items="${couponDetails }" var="couponDetail" varStatus="i">
-      				<c:set var="count" value="0"/>
 					<c:if test="${checkoutInfo.productTotal > couponDetail.coupon.min_point}">
-      				<div class="row">
+      				<div class="row border">
       					<div class="col-sm-1">
-      						<input type="radio" name="coupon" value="${couponDetail.id }">
+      						<input type="radio" name="coupon" value="${couponDetail.id }" id="row_${i.count }">
       					</div>
       					<div class="col-sm-11">
       						<p>
       							<b>券號:&nbsp;<c:out value='${couponDetail.code}'/></b>
-      							<b>面額:&nbsp;<c:out value='${couponDetail.coupon.amount}'/>元</b>
-      							<b>使用條件:&nbsp;滿<c:out value='${couponDetail.coupon.min_point}'/>元</b>
+      							<b>面額:&nbsp;<span id="coupon_amount_${i.count }"><c:out value='${couponDetail.coupon.amount}'/></span>元</b>
+      							<b>
+      								<c:if test="${couponDetail.coupon.min_point==0}">
+      									使用條件:&nbsp;無特別限制
+      								</c:if>
+      								<c:if test="${couponDetail.coupon.min_point!=0}">
+      									使用條件:&nbsp;滿<c:out value='${couponDetail.coupon.min_point}'/>元
+      								</c:if>
+      							</b>
       						</p>
       					</div>
       				</div>
-      				<c:set var="count" value="${count+1 }"/>
       				</c:if>
       				</c:forEach>
-      				<div class="row">
+      				<div class="row border">
       					<div class="col-sm-1">
       						<input type="radio" name="coupon" value="0">
       					</div>
@@ -103,7 +109,7 @@
       			<div class="card-header"><h5>付款方式</h5></div>
       			<div class="card-body">
       				<p>
-      				<form method="post" action="<c:url value='/place_order'/>">
+      				
       					<input type="radio" name="paymentway" value="COD">貨到付款
       					&nbsp;
       					<input type="radio" name="paymentway" value="Card">信用卡
@@ -157,17 +163,48 @@
       				<div class="col" align="right">運費:</div>
       				<div class="col">NT$<c:out value='${checkoutInfo.shippingCostTotal}'/></div>
       			</div>
+      			<div class="row mt-2 d-none" id="coupon_use_div">
+      				<div class="col" align="right">折價券:</div>
+      				<div class="col" style="color: red;">-NT$<span id="coupon_use"></span></div>
+      			</div>
       			<div class="row mt-2">
       				<div class="col" align="right">付款總計:</div>
-      				<div class="col"><b>NT$<c:out value='${checkoutInfo.paymentTotal}'/></b></div>
+      				<div class="col"><b>NT$<span id="paymentTotal"><c:out value='${checkoutInfo.paymentTotal}'/></span></b></div>
       			</div>
       		</div>
       	</div>
       </div>
 <script>
 $(document).ready(function(){
-	$(":radio").on("click",function(){
+	$("input[type='radio'][name='paymentway']").on("click",function(){
 		$("#confirmBtn").removeClass("d-none");
+		});
+
+	$("input[type='radio'][name='coupon']").on("click",function(){
+		var couponid=$(this).val();
+		var paymentTotal=parseInt($("#paymentTotal").text());
+		var coupon_use=parseInt($("#coupon_use").text());
+		if(couponid==0){
+			if(!coupon_use){
+				}else{
+					paymentTotal=paymentTotal+coupon_use;
+					$("#coupon_use").empty();
+				}			
+			$("#coupon_use_div").addClass("d-none");
+			$("#paymentTotal").empty().text(paymentTotal);
+			}else {
+				var rowno=$(this).attr("id").split("_")[1];
+				var couponamount=parseInt($("#coupon_amount_"+rowno).text());
+				if(!coupon_use){
+					paymentTotal=paymentTotal-couponamount;
+				}else{
+					paymentTotal=paymentTotal+coupon_use-couponamount;
+				}				
+				$("#coupon_use_div").removeClass("d-none");
+				$("#coupon_use").empty().text(couponamount);
+				$("#paymentTotal").empty().text(paymentTotal);
+			}
+				
 		});
 });
 </script>     

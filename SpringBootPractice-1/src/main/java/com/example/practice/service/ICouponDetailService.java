@@ -15,6 +15,7 @@ public interface ICouponDetailService {
 	public boolean isReceived(Member member,Coupon coupon);
 	public boolean checkCode(String code);
 	public List<CouponDetail> findByCoupon(Coupon coupon);
+	public List<CouponDetail> findByMemberAndUseStatus(Member member,int use_status);
 	
 
 }

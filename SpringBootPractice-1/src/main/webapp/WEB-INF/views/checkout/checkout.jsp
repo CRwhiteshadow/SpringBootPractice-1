@@ -64,6 +64,41 @@
       				</p>
       			</div>
       		</div>
+      		<c:if test="${couponDetails.size()!=0 }">
+      		<div class="card">
+      			<div class="card-header"><h5>折價券選擇</h5></div>
+      			<div class="card-body">
+      				<c:forEach items="${couponDetails }" var="couponDetail" varStatus="i">
+      				<c:set var="count" value="0"/>
+					<c:if test="${checkoutInfo.productTotal > couponDetail.coupon.min_point}">
+      				<div class="row">
+      					<div class="col-sm-1">
+      						<input type="radio" name="coupon" value="${couponDetail.id }">
+      					</div>
+      					<div class="col-sm-11">
+      						<p>
+      							<b>券號:&nbsp;<c:out value='${couponDetail.code}'/></b>
+      							<b>面額:&nbsp;<c:out value='${couponDetail.coupon.amount}'/>元</b>
+      							<b>使用條件:&nbsp;滿<c:out value='${couponDetail.coupon.min_point}'/>元</b>
+      						</p>
+      					</div>
+      				</div>
+      				<c:set var="count" value="${count+1 }"/>
+      				</c:if>
+      				</c:forEach>
+      				<div class="row">
+      					<div class="col-sm-1">
+      						<input type="radio" name="coupon" value="0">
+      					</div>
+      					<div class="col-sm-11">
+      						<p>
+      							<b>不使用折價券</b>
+      						</p>
+      					</div>
+      				</div>
+      			</div>
+      		</div>
+      		</c:if>
       		<div class="card mt-3 mb-3">
       			<div class="card-header"><h5>付款方式</h5></div>
       			<div class="card-body">

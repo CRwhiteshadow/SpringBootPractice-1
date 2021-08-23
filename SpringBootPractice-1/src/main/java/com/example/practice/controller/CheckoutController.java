@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.practice.model.CartItem;
 import com.example.practice.model.CheckoutInfo;
+import com.example.practice.model.CouponDetail;
 import com.example.practice.model.Member;
 import com.example.practice.model.Order;
 import com.example.practice.model.PaymentMethod;
 import com.example.practice.model.Product;
 import com.example.practice.service.ICartItemService;
 import com.example.practice.service.ICheckoutService;
+import com.example.practice.service.ICouponDetailService;
 import com.example.practice.service.IMarketingEventService;
 import com.example.practice.service.IMemberService;
 import com.example.practice.service.IOrderService;
@@ -38,6 +40,7 @@ public class CheckoutController {
 	@Autowired private IMemberService memberService;
 	@Autowired private ICheckoutService checkoutService;
 	@Autowired private IOrderService orderService;
+	@Autowired private ICouponDetailService couponDetailService;
 	
 	@GetMapping("/checkout")
 	public String showPage(Model m,HttpServletRequest request) {
@@ -51,11 +54,13 @@ public class CheckoutController {
 		}
 		Map<Integer , Integer> productdcps = marketingEventService.productdcp(products);
 		CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(cartItems);
+		List<CouponDetail> couponDetails = couponDetailService.findByMemberAndUseStatus(member, 0);
 		m.addAttribute("cartItems", cartItems);
 		m.addAttribute("productdcps", productdcps);
 		m.addAttribute("checkoutInfo", checkoutInfo);
 		m.addAttribute("postName", member.getPostname());
 		m.addAttribute("postMobile", member.getPostmobile());
+		m.addAttribute("couponDetails", couponDetails);
 		m.addAttribute("postAddress", memberService.getPostAddress(member));
 		return "checkout/checkout";
 	}

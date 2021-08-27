@@ -9,6 +9,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -35,9 +37,29 @@ public class CouponController {
 	@Autowired private IMemberService memberService;
 	
 	@GetMapping("")
-	public String showForm(Model m) {
+	public String listAll(Model m) {
 		List<Coupon> coupons = couponService.findAll();
 		m.addAttribute("coupons", coupons);
+		return bsPage(m,1,"id","asc");
+	}
+	
+	@GetMapping("/page/{pageNum}")
+	public String bsPage(Model m,
+			 @PathVariable(name = "pageNum") int pageNum,
+			 @Param("sortField") String sortField,
+		     @Param("sortDir") String sortDir ) {
+		Page<Coupon> page = couponService.QueryAllPage(pageNum, sortField, sortDir);
+		List<Coupon> coupons = page.getContent();
+		
+		m.addAttribute("currentPage", pageNum);
+	    m.addAttribute("totalPages", page.getTotalPages());
+	    m.addAttribute("totalItems", page.getTotalElements());		
+	    
+	    m.addAttribute("sortField", sortField);
+	    m.addAttribute("sortDir", sortDir);
+	    m.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+		m.addAttribute("coupons", coupons);
+		
 		return "coupon/index";
 	}
 	
@@ -59,6 +81,29 @@ public class CouponController {
 		List<CouponDetail> couponDetails = couponDetailService.findByCoupon(coupon);
 		m.addAttribute("coupon", coupon);
 		m.addAttribute("couponDetails", couponDetails);
+		return getDetailPage(m, id, 1, "id", "asc");
+	}
+	
+	@GetMapping("/get/{id}/page/{pageNum}")
+	public String getDetailPage(Model m, 
+			@PathVariable("id") Long couponid,
+			@PathVariable(name = "pageNum") int pageNum,
+			 @Param("sortField") String sortField,
+		     @Param("sortDir") String sortDir) {
+		Coupon coupon = couponService.findById(couponid);
+		m.addAttribute("coupon", coupon);
+		Page<CouponDetail> page = couponDetailService.QueryAllPage(pageNum, sortField, sortDir,coupon);
+		List<CouponDetail> couponDetails = page.getContent();
+		
+		m.addAttribute("currentPage", pageNum);
+	    m.addAttribute("totalPages", page.getTotalPages());
+	    m.addAttribute("totalItems", page.getTotalElements());		
+	    
+	    m.addAttribute("sortField", sortField);
+	    m.addAttribute("sortDir", sortDir);
+	    m.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+	    m.addAttribute("couponDetails", couponDetails);
+		
 		return "coupon/detail";
 	}
 	

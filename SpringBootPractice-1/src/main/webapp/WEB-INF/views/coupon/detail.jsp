@@ -100,16 +100,16 @@
                  <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-						    <th>No.</th>
-						    <th>序號</th>
-                            <th>建立時間</th>
-					    	<th>歸戶使用者id</th>
-					    	<th>獲取類型</th>
-					    	<th>使用狀態</th>
-					    	<th>使用時間</th>
-						    <th>訂單編號</th>
-						    <th>訂單金額(未含運)</th>
-						    <th>訂單商品成本</th>
+						    <th scope="col">No.</th>
+						    <th scope="col">序號</th>
+                            <th scope="col">建立時間</th>
+					    	<th scope="col">歸戶使用者id</th>
+					    	<th scope="col">獲取類型</th>
+					    	<th scope="col">使用狀態</th>
+					    	<th scope="col">使用時間</th>
+						    <th scope="col">訂單編號</th>
+						    <th scope="col">訂單金額(未含運)</th>
+						    <th scope="col">訂單商品成本</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -181,16 +181,43 @@
                     </tbody>
                   </table>
                 <div class="clearfix">
-<!--                            <ul class="pagination">
-					        <li class="page-item disabled"><a href="#">Previous</a></li>
-					        <li class="page-item active"><a href="#" class="page-link">1</a></li>
-					        <li class="page-item"><a href="#" class="page-link">2</a></li>
-				    	    <li class="page-item"><a href="#" class="page-link">3</a></li>
-					        <li class="page-item"><a href="#" class="page-link">4</a></li>
-					        <li class="page-item"><a href="#" class="page-link">5</a></li>
-				    	    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                            <ul class="pagination">
+					        <c:if test="${currentPage > 1}">
+                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/bs/coupon/get/${coupon.id}/page/${currentPage - 1}?sortField=${sortField}&sortDir=${sortDir}">前一頁</a></li>
+                            </c:if>
+                            
+                            <c:if test="${currentPage > 1}">
+                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/bs/coupon/get/${coupon.id}/page/1?sortField=${sortField}&sortDir=${sortDir}">1</a></li>
+                            </c:if>
+                            <c:if test="${currentPage == 1}">
+                            <li class="page-item"><a class="page-link" >1</a></li>
+                            </c:if>
+                
+                            <c:forEach var="i" begin="2" end="${totalPages}">
+                
+                            <c:if test="${currentPage != i}">
+                                <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/bs/coupon/get/${coupon.id}/page/${i}?sortField=${sortField}&sortDir=${sortDir}">${i}</a></li>
+                            </c:if>
+                            <c:if test="${currentPage == i}">
+                                <li class="page-item"><a class="page-link" >${i}</a></li>
+                            </c:if>
+                            </c:forEach>
+                            
+                            <c:if test="${currentPage < totalPages}">
+                                <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/bs/coupon/get/${coupon.id}/page/${currentPage + 1}?sortField=${sortField}&sortDir=${sortDir}">下一頁</a></li>
+                            </c:if>
+                            <c:if test="${currentPage == i}">
+                                <li class="page-item"><a class="page-link">下一頁</a></li>
+                            </c:if>
+                    
+                            <c:if test="${currentPage < totalPages}">
+                                <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/bs/coupon/get/${coupon.id}/page/${totalPages}?sortField=${sortField}&sortDir=${sortDir}">最後一頁</a></li>
+                            </c:if>
+                            <c:if test="${currentPage == totalPages}">
+                                <li class="page-item"><a class="page-link">最後一頁</a></li>
+                            </c:if>
 				            </ul>
--->				            
+				            
 <a class="btn btn-success" style="color:white;" href="<c:url value='/bs/coupon'/>">返回</a>
 			    </div>
             </div>

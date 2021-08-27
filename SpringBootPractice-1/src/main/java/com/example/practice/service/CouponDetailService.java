@@ -5,6 +5,10 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.practice.model.Coupon;
@@ -67,6 +71,16 @@ public class CouponDetailService implements ICouponDetailService{
 	@Override
 	public List<CouponDetail> findByMemberAndUseStatus(Member member, int use_status,int productTotal) {
 		return repo.findByMemberAndUseStatus(member, use_status,productTotal);
+	}
+
+	@Override
+	public Page<CouponDetail> QueryAllPage(int pageNum, String sortField, String sortDir,Coupon coupon) {
+		int pageSize = 5;
+		Pageable pageable = PageRequest.of(pageNum - 1, pageSize,
+				  sortDir.equals("asc") ? Sort.by(sortField).ascending()
+                          : Sort.by(sortField).descending()
+                          );//因為由0開始
+		return repo.findByCoupon(pageable, coupon);
 	}
 
 }

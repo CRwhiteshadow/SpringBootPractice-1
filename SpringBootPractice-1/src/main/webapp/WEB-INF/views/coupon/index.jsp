@@ -67,18 +67,18 @@
 								    <label for="selectAll"></label>
 							    </span>
 						    </th>
-						    <th>折價券ID</th>
-                            <th>折價券名稱</th>
-					    	<th>折價券面額</th>
-					    	<th>可領取結束時間</th>
-					    	<th>可使用開始時間</th>
-					    	<th>可使用結束時間</th>
-						    <th>使用類型</th>
-						    <th>每人限領張數</th>
-						    <th>使用門檻</th>
-						    <th>發行數量</th>
-						    <th>領取數量</th>
-						    <th>使用數量</th>
+						    <th scope="col"><a href="${pageContext.request.contextPath}/bs/coupon/page/${currentPage}?sortField=id&sortDir=${reverseSortDir}" >折價券ID</a></th>
+                            <th scope="col"style="width:200px;"><a href="${pageContext.request.contextPath}/bs/coupon/page/${currentPage}?sortField=name&sortDir=${reverseSortDir}" >折價券名稱</a></th>
+					    	<th scope="col"><a href="${pageContext.request.contextPath}/bs/coupon/page/${currentPage}?sortField=amount&sortDir=${reverseSortDir}" >折價券面額</a></th>
+					    	<th scope="col">可領取結束時間</th>
+					    	<th scope="col">可使用開始時間</th>
+					    	<th scope="col">可使用結束時間</th>
+						    <th scope="col">使用類型</th>
+						    <th scope="col">每人限領張數</th>
+						    <th scope="col">使用門檻</th>
+						    <th scope="col">發行數量</th>
+						    <th scope="col">領取數量</th>
+						    <th scope="col">使用數量</th>
 						    <th>詳細資訊</th>
                             <th>修改刪除</th>
                         </tr>
@@ -136,17 +136,44 @@
                 </table>
                 <div class="clearfix">
 				    <div class="hint-text">共<b>${count}</b>筆資料</div>
-				    <!--  
+ 
                             <ul class="pagination">
-					        <li class="page-item disabled"><a href="#">Previous</a></li>
-					        <li class="page-item"><a href="#" class="page-link">1</a></li>
-					        <li class="page-item"><a href="#" class="page-link">2</a></li>
-				    	    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-					        <li class="page-item"><a href="#" class="page-link">4</a></li>
-					        <li class="page-item"><a href="#" class="page-link">5</a></li>
-				    	    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+					        <c:if test="${currentPage > 1}">
+                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/bs/coupon/page/${currentPage - 1}?sortField=${sortField}&sortDir=${sortDir}">前一頁</a></li>
+                            </c:if>
+                            
+                            <c:if test="${currentPage > 1}">
+                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/bs/coupon/page/1?sortField=${sortField}&sortDir=${sortDir}">1</a></li>
+                            </c:if>
+                            <c:if test="${currentPage == 1}">
+                            <li class="page-item"><a class="page-link" >1</a></li>
+                            </c:if>
+                
+                            <c:forEach var="i" begin="2" end="${totalPages}">
+                
+                            <c:if test="${currentPage != i}">
+                                <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/bs/coupon/page/${i}?sortField=${sortField}&sortDir=${sortDir}">${i}</a></li>
+                            </c:if>
+                            <c:if test="${currentPage == i}">
+                                <li class="page-item"><a class="page-link" >${i}</a></li>
+                            </c:if>
+                            </c:forEach>
+                            
+                            <c:if test="${currentPage < totalPages}">
+                                <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/bs/coupon/page/${currentPage + 1}?sortField=${sortField}&sortDir=${sortDir}">下一頁</a></li>
+                            </c:if>
+                            <c:if test="${currentPage == i}">
+                                <li class="page-item"><a class="page-link">下一頁</a></li>
+                            </c:if>
+                    
+                            <c:if test="${currentPage < totalPages}">
+                                <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/bs/coupon/page/${totalPages}?sortField=${sortField}&sortDir=${sortDir}">最後一頁</a></li>
+                            </c:if>
+                            <c:if test="${currentPage == totalPages}">
+                                <li class="page-item"><a class="page-link">最後一頁</a></li>
+                            </c:if>
 				            </ul>
-                   --> 
+
 			    </div>
             </div>
         </div>        

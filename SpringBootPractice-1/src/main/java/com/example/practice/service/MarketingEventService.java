@@ -11,6 +11,10 @@ import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -102,6 +106,16 @@ public class MarketingEventService implements IMarketingEventService {
 	@Override
 	public MarketingEventBean findByMeventtile(String meventtitle) {
 		return marketingEventDAO.findByMeventtile(meventtitle);
+	}
+
+	@Override
+	public Page<MarketingEventBean> QueryAllPage(int pageNum, String sortField, String sortDir) {
+		int pageSize = 5;
+		Pageable pageable = PageRequest.of(pageNum - 1, pageSize,
+				  sortDir.equals("asc") ? Sort.by(sortField).ascending()
+                          : Sort.by(sortField).descending()
+                          );//因為由0開始
+		return marketingEventDAO.findAll(pageable);
 	}
 	
 	

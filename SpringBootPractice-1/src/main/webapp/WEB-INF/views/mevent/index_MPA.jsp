@@ -68,15 +68,14 @@
 								    <label for="selectAll"></label>
 							    </span>
 						    </th>
-                            <th>活動名稱</th>
-					    	<th>類型ID</th>
-					    	<th>活動開始時間</th>
-					    	<th>活動結束時間</th>
-						    <th>活動辦法</th>
-					    	<th>是否上線</th>
-						    <th>圖片</th>
-					    	<th>負責人ID</th>
-                            <th>修改刪除</th>
+                            <th scope="col"style="width:200px;"><a href="${pageContext.request.contextPath}/mevent/page/${currentPage}?sortField=meventname&sortDir=${reverseSortDir}" >活動名稱</a></th>
+					    	<th scope="col"><a href="${pageContext.request.contextPath}/mevent/page/${currentPage}?sortField=meventtypeid&sortDir=${reverseSortDir}" >類型ID</a></th>
+					    	<th scope="col"><a href="${pageContext.request.contextPath}/mevent/page/${currentPage}?sortField=meventstartdate&sortDir=${reverseSortDir}" >活動開始時間</a></th>
+					    	<th scope="col"><a href="${pageContext.request.contextPath}/mevent/page/${currentPage}?sortField=meventenddate&sortDir=${reverseSortDir}" >活動結束時間</a></th>
+						    <th scope="col">活動辦法</th>
+					    	<th scope="col"><a href="${pageContext.request.contextPath}/mevent/page/${currentPage}?sortField=meventonline&sortDir=${reverseSortDir}" >是否上線</a></th>
+						    <th scope="col">圖片</th>
+                            <th scope="col">修改刪除</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -102,7 +101,6 @@
 								</c:when>
 								<c:otherwise>沒有圖片喔</c:otherwise>
 							    </c:choose></td>
-					    	<td><c:out value="${mevent.meventownerid}" /></td>
                             <td>
                                 <input type="hidden" name="id" value="<c:out value='${mevent.meventid}' />" />
 							    <a href="<c:url value='/mevent/edit/${mevent.meventid}'/>" class="edit"><i class="material-icons" data-toggle="tooltip" title="修改">&#xE254;</i></a>
@@ -115,17 +113,44 @@
                 </table>
                 <div class="clearfix">
 				    <div class="hint-text">共<b>${count}</b>筆資料</div>
-				    <!--  
+
                             <ul class="pagination">
-					        <li class="page-item disabled"><a href="#">Previous</a></li>
-					        <li class="page-item"><a href="#" class="page-link">1</a></li>
-					        <li class="page-item"><a href="#" class="page-link">2</a></li>
-				    	    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-					        <li class="page-item"><a href="#" class="page-link">4</a></li>
-					        <li class="page-item"><a href="#" class="page-link">5</a></li>
-				    	    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+					        <c:if test="${currentPage > 1}">
+                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/mevent/page/${currentPage - 1}?sortField=${sortField}&sortDir=${sortDir}">前一頁</a></li>
+                            </c:if>
+                            
+                            <c:if test="${currentPage > 1}">
+                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/mevent/page/1?sortField=${sortField}&sortDir=${sortDir}">1</a></li>
+                            </c:if>
+                            <c:if test="${currentPage == 1}">
+                            <li class="page-item"><a class="page-link" >1</a></li>
+                            </c:if>
+                
+                            <c:forEach var="i" begin="2" end="${totalPages}">
+                
+                            <c:if test="${currentPage != i}">
+                                <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/mevent/page/${i}?sortField=${sortField}&sortDir=${sortDir}">${i}</a></li>
+                            </c:if>
+                            <c:if test="${currentPage == i}">
+                                <li class="page-item"><a class="page-link" >${i}</a></li>
+                            </c:if>
+                            </c:forEach>
+                            
+                            <c:if test="${currentPage < totalPages}">
+                                <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/mevent/page/${currentPage + 1}?sortField=${sortField}&sortDir=${sortDir}">下一頁</a></li>
+                            </c:if>
+                            <c:if test="${currentPage == i}">
+                                <li class="page-item"><a class="page-link">下一頁</a></li>
+                            </c:if>
+                    
+                            <c:if test="${currentPage < totalPages}">
+                                <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/mevent/page/${totalPages}?sortField=${sortField}&sortDir=${sortDir}">最後一頁</a></li>
+                            </c:if>
+                            <c:if test="${currentPage == totalPages}">
+                                <li class="page-item"><a class="page-link">最後一頁</a></li>
+                            </c:if>
 				            </ul>
-                   --> 
+
 			    </div>
             </div>
         </div>        

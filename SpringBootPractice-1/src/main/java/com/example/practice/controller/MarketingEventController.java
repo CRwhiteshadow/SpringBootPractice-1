@@ -11,6 +11,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,9 +45,29 @@ public class MarketingEventController {
 	@Autowired private ICouponService couponService;
 	
 	@GetMapping("")
-	public String showForm(Model m) {
+	public String listAll(Model m) {
 		List<MarketingEventBean> mevents = marketingEventService.findAll();
 		m.addAttribute("mevents", mevents);
+		return bsPage(m,1,"meventid","asc");
+	}
+	
+	@GetMapping("/page/{pageNum}")
+	public String bsPage(Model m,
+			 @PathVariable(name = "pageNum") int pageNum,
+			 @Param("sortField") String sortField,
+		     @Param("sortDir") String sortDir ) {
+		Page<MarketingEventBean> page = marketingEventService.QueryAllPage(pageNum, sortField, sortDir);
+		List<MarketingEventBean> mevents = page.getContent();
+		
+		m.addAttribute("currentPage", pageNum);
+	    m.addAttribute("totalPages", page.getTotalPages());
+	    m.addAttribute("totalItems", page.getTotalElements());		
+	    
+	    m.addAttribute("sortField", sortField);
+	    m.addAttribute("sortDir", sortDir);
+	    m.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+		m.addAttribute("mevents", mevents);
+		
 		return "mevent/index_MPA";
 	}
 	

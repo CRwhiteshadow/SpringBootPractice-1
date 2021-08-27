@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+
 import com.example.practice.model.MarketingEventBean;
 import com.example.practice.model.MarketingEventProductListBean;
 import com.example.practice.model.Product;
@@ -22,5 +24,6 @@ public interface IMarketingEventService {
 	public List<MarketingEventProductListBean> findByMeventstartdateBeforeAndMeventenddateAfterAndMeventonlineTrueAndProductid(Timestamp time,Integer productid);
 	public Map<Integer , Integer> productdcp(List<Product> products);
 	public MarketingEventBean findByMeventtile(String meventtitle);
+	public Page<MarketingEventBean> QueryAllPage(int pageNum,String sortField, String sortDir);
 	
 }

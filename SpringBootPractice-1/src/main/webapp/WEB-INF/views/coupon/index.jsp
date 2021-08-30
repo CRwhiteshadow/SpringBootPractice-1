@@ -79,8 +79,8 @@
 						    <th scope="col">發行數量</th>
 						    <th scope="col">領取數量</th>
 						    <th scope="col">使用數量</th>
-						    <th>詳細資訊</th>
-                            <th>修改刪除</th>
+						    <th scope="col">詳細資訊</th>
+                            <th scope="col">修改刪除</th>
                         </tr>
                     </thead>
                     <tbody>

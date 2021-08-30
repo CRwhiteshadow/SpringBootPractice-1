@@ -161,7 +161,8 @@
     </div>
 
     <!--Full-slider--------------------------------------------------------------->
-
+<c:choose>
+	<c:when test="${mevents.size()!=0 }">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height: 500px;margin: auto;width: 1000px;" align="center">
             <ol class="carousel-indicators">
             	<c:forEach  begin="0" end="${mevents.size()-1}" step="1" var="j" >
@@ -198,6 +199,13 @@
     			<span class="sr-only">Next</span>
   			</a>
         </div>
+	</c:when>
+	<c:otherwise>
+		<div class="container" align="center">
+			<img src="<c:url value='/images/addefault.jpg'/>">
+		</div>
+	</c:otherwise>
+</c:choose>
         <script src="js/02.js"></script>
     <!--Feature-Categories-------------------------------->
     <div class="feature-heading">

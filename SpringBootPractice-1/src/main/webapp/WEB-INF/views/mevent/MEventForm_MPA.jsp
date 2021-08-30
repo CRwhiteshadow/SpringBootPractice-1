@@ -3,6 +3,7 @@
     import="com.example.practice.customEL.ImgOut"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +13,7 @@
 <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/backstage/backstage.css"/>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/backstage/backstagemevent.css"/>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/backstage/backstagemeventform.css"/>
 <!-- Bootstrap Table with Search Column Feature -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -31,7 +32,7 @@
   <a href="#" id="a_member">會員管理</a>
   <a href="#" id="a_product">商品管理</a>
   <a href="<c:url value='/mevent'/>" id="a_mevent">線上行銷活動管理</a>
-  <a href="<c:url value='//bs/coupon'/>" id="a_coupon">折價券管理</a>
+  <a href="<c:url value='/bs/coupon'/>" id="a_coupon">折價券管理</a>
   <a href="#" id="a_event">線下活動管理</a>
   <a href="#" id="a_forum">論壇管理</a>
   <a href="#" id="a_">認養管理</a>
@@ -64,7 +65,7 @@
 					<div class="form-group">
 						<label>活動類型:</label>
 						<c:if test="${mevent != null }">
-							<select name="typeid" class="form-control" required >
+							<select name="typeid" class="form-control" required style="width: 250px;">
 								<c:choose>
 									<c:when test="${mevent.meventtypeid==1 }">
 										<option value="1" selected>會員招募活動</option>
@@ -100,7 +101,7 @@
 							</select>
 						</c:if>
 						<c:if test="${mevent == null }">
-							<select name="typeid" class="form-control col-sm-3" required>
+							<select name="typeid" class="form-control col-sm-3" required style="width: 250px;">
                         		<option value="1">會員招募活動</option>
 								<option value="2">商品促銷活動</option>
 								<option value="3">限時搶購活動</option>
@@ -111,18 +112,18 @@
 					<div class="form-group">
 						<label>活動開始時間:</label>
 						<c:set var="ts" value="${mevent.meventstartdate }" />
-						<input type="date" name="startdate" class="form-control col-sm-3" required value="${fn:substring(ts,0,10) }"><span id="spsd"></span><br>
-						<input type="time" name="starttime" step="1" class="form-control col-sm-3" required value="${fn:substring(ts,11,-1) }"><span id="spst"></span>
+						<input type="date" name="startdate" class="form-control col-sm-3" required value="${fn:substring(ts,0,10) }" style="width: 250px;"><span id="spsd"></span><br>
+						<input type="time" name="starttime" step="1" class="form-control col-sm-3" required value="${fn:substring(ts,11,-1) }" style="width: 250px;"><span id="spst"></span>
 					</div>
 					<div class="form-group">
 						<label>活動結束時間:</label>
 						<c:set var="td" value="${mevent.meventenddate }" />
-						<input type="date" name="enddate" class="form-control col-sm-3" required value="${fn:substring(td,0,10) }"><span id="sped"></span><br>
-						<input type="time" name="endtime" step="1" class="form-control col-sm-3" required value="${fn:substring(td,11,-1) }"><span id="spet"></span>
+						<input type="date" name="enddate" class="form-control col-sm-3" required value="${fn:substring(td,0,10) }" style="width: 250px;"><span id="sped"></span><br>
+						<input type="time" name="endtime" step="1" class="form-control col-sm-3" required value="${fn:substring(td,11,-1) }" style="width: 250px;"><span id="spet"></span>
 					</div>
                     <div class="form-group">
 						<label>活動辦法:</label>
-						<textarea rows="5" cols="80" name="description"><c:out value='${mevent.meventdescription }'/></textarea>
+						<textarea rows="5" cols="120" name="description"><c:out value='${mevent.meventdescription }'/></textarea>
 					</div>
                     <div class="form-group">
 						<label>活動是否上線:</label>
@@ -156,7 +157,7 @@
 						<input type="file" name="pic" id="file1" multiple="multiple">
 						<hr>
 						預覽:<br>
-						<img id="img1">
+						<img id="img1" style="max-width: 1200px">
 					</div>	
 					<c:if test="${mevent != null}">
 						<input type="hidden" name="ownerid" value="<c:out value='${mevent.meventownerid}' />" />
@@ -167,22 +168,36 @@
 						<label>活動折價券</label>
 						<input type="hidden" name="meventlistid" id="meventlistid" value="<c:out value='${mlbean0.meventlistid}'/>"/>
 						<c:set var="mclbean" value="${mlbean0.marketingEventCouponLists}"/>
-						<br>
-						折價券ID:<input type="text" class="cid" name="coupon_0" id="coupon_0" value="<c:out value='${mclbean.get(0).coupon_id}'/>" />
-						<br>
-						折價券名稱:<input type="text" id="coupon_name_0" readonly value="<c:out value='${mclbean.get(0).coupon.name}'/>"/>
-						<br>
-						折價券面額:<input type="text" id="coupon_amount_0" readonly value="<c:out value='${mclbean.get(0).coupon.amount}'/>"/>
-						<br>
-						可獲取時間:<input type="text" id="coupon_enable_time_0" readonly value="<c:out value='${mclbean.get(0).coupon.enable_time}'/>"/>
-						<br>
-						可使用開始時間:<input type="text" id="coupon_start_time_0" readonly  value="<c:out value='${mclbean.get(0).coupon.start_time}'/>"/>
-						<br>
-						可使用結束時間:<input type="text" id="coupon_end_time_0" readonly value="<c:out value='${mclbean.get(0).coupon.end_time}'/>"/>
-						<br>
-						每人限領張數:<input type="text" id="coupon_per_limit_0" readonly value="<c:out value='${mclbean.get(0).coupon.per_limit}'/>"/>
-						<br>
-						使用門檻:滿<input type="text" id="coupon_min_point_0" readonly value="<c:out value='${mclbean.get(0).coupon.min_point}'/>"/>元
+						<div class="card">
+							<div class="card-header">
+								<div class="d-flex flex-row">
+									<div class="p-2">折價券ID</div>
+									<div class="p-2"><input type="text" class="cid" name="coupon_0" id="coupon_0" value="<c:out value='${mclbean.get(0).coupon_id}'/>" /></div>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="d-flex flex-row">
+									<div class="p-2">折價券名稱</div>
+									<div class="p-2"><input type="text" id="coupon_name_0" readonly value="<c:out value='${mclbean.get(0).coupon.name}'/>"/></div>
+									<div class="p-2">折價券面額</div>
+									<div class="p-2"><input type="text" id="coupon_amount_0" readonly value="<c:out value='${mclbean.get(0).coupon.amount}'/>"/></div>
+									<div class="p-2">使用門檻</div>
+									<div class="p-2">滿<input type="text" id="coupon_min_point_0" readonly value="<c:out value='${mclbean.get(0).coupon.min_point}'/>"/>元</div>
+								</div>
+								<div class="d-flex flex-row">
+									<div class="p-2">可獲取時間</div>
+									<div class="p-2"><input type="text" id="coupon_enable_time_0" readonly value="<fmt:formatDate value='${mclbean.get(0).coupon.enable_time}' pattern="yyyy-MM-dd HH:mm:ss" />"/></div>
+									<div class="p-2">可使用開始時間</div>
+									<div class="p-2"><input type="text" id="coupon_start_time_0" readonly  value="<fmt:formatDate value='${mclbean.get(0).coupon.start_time}' pattern="yyyy-MM-dd HH:mm:ss" />"/></div>
+									<div class="p-2">可使用結束時間</div>
+									<div class="p-2"><input type="text" id="coupon_end_time_0" readonly value="<fmt:formatDate value='${mclbean.get(0).coupon.end_time}' pattern="yyyy-MM-dd HH:mm:ss" />"/></div>
+								</div>
+								<div class="d-flex flex-row">
+									<div class="p-2">每人限領張數</div>
+									<div class="p-2"><input type="text" id="coupon_per_limit_0" readonly value="<c:out value='${mclbean.get(0).coupon.per_limit}'/>"/></div>
+								</div>
+							</div>
+						</div>
 						</div>
 					</c:if>	
 					<c:if test="${mlbean0!=null && mevent.meventtypeid==2}">	
@@ -218,23 +233,36 @@
 						<c:if test="${mlbean0==null}">
 						<div class="form-group eventcoupon">
 						<label>活動折價券</label>
-						<br>
-						折價券ID:<input type="text" class="cid" name="coupon_0" id="coupon_0" value="" />
-						<br>
-						折價券名稱:<input type="text" id="coupon_name_0" readonly/>
-						<br>
-						折價券面額:<input type="text" id="coupon_amount_0" readonly/>
-						<br>
-						可獲取時間:<input type="text" id="coupon_enable_time_0" readonly/>
-						<br>
-						可使用開始時間:<input type="text" id="coupon_start_time_0" readonly/>
-						<br>
-						可使用結束時間:<input type="text" id="coupon_end_time_0" readonly/>
-						<br>
-						每人限領張數:<input type="text" id="coupon_per_limit_0" readonly/>
-						<br>
-						使用門檻:滿<input type="text" id="coupon_min_point_0" readonly/>元
-						
+						<div class="card">
+							<div class="card-header">
+								<div class="d-flex flex-row">
+									<div class="p-2">折價券ID</div>
+									<div class="p-2"><input type="text" class="cid" name="coupon_0" id="coupon_0" value="<c:out value='${mclbean.get(0).coupon_id}'/>" /></div>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="d-flex flex-row">
+									<div class="p-2">折價券名稱</div>
+									<div class="p-2"><input type="text" id="coupon_name_0" readonly value="<c:out value='${mclbean.get(0).coupon.name}'/>"/></div>
+									<div class="p-2">折價券面額</div>
+									<div class="p-2"><input type="text" id="coupon_amount_0" readonly value="<c:out value='${mclbean.get(0).coupon.amount}'/>"/></div>
+									<div class="p-2">使用門檻</div>
+									<div class="p-2">滿<input type="text" id="coupon_min_point_0" readonly value="<c:out value='${mclbean.get(0).coupon.min_point}'/>"/>元</div>
+								</div>
+								<div class="d-flex flex-row">
+									<div class="p-2">可獲取時間</div>
+									<div class="p-2"><input type="text" id="coupon_enable_time_0" readonly value="<fmt:formatDate value='${mclbean.get(0).coupon.enable_time}' pattern="yyyy-MM-dd HH:mm:ss" />"/></div>
+									<div class="p-2">可使用開始時間</div>
+									<div class="p-2"><input type="text" id="coupon_start_time_0" readonly  value="<fmt:formatDate value='${mclbean.get(0).coupon.start_time}' pattern="yyyy-MM-dd HH:mm:ss" />"/></div>
+									<div class="p-2">可使用結束時間</div>
+									<div class="p-2"><input type="text" id="coupon_end_time_0" readonly value="<fmt:formatDate value='${mclbean.get(0).coupon.end_time}' pattern="yyyy-MM-dd HH:mm:ss" />"/></div>
+								</div>
+								<div class="d-flex flex-row">
+									<div class="p-2">每人限領張數</div>
+									<div class="p-2"><input type="text" id="coupon_per_limit_0" readonly value="<c:out value='${mclbean.get(0).coupon.per_limit}'/>"/></div>
+								</div>
+							</div>
+						</div>
 						</div>
 						<div class="form-group eventproduct d-none">
 						<label>活動商品</label>

@@ -283,14 +283,24 @@ public class MarketingEventController {
 	@GetMapping("/edm/{meventtitle}")
 	public String showEdm(@PathVariable("meventtitle") String meventtitle,Model m) {
 		MarketingEventBean mevent = marketingEventService.findByMeventtile(meventtitle);
-		List<MarketingEventProductListBean> mepls = mevent.getMarketingEventListBean().get(0).getMarketingEventProductListBean();
-		List<Product> products = new ArrayList<Product>();
-		for(int i=0;i<mepls.size();i++) {
-			products.add(productService.findById(mepls.get(i).getProductid()));
-		}
-		Map<Integer, Integer> productdcps = marketingEventService.productdcp(products);
-		m.addAttribute("mevent", mevent);
-		m.addAttribute("productdcps", productdcps);
-		return "mevent/edm";
+		Timestamp time = Timestamp.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		if(mevent==null) {
+			return "mevent/error";
+		}else {
+			if(mevent.getMeventenddate().before(time) || mevent.isMeventonline()==false) {
+				m.addAttribute("errormsg", "抱歉活動已結束");
+				return "mevent/error";
+			}else {			
+					List<MarketingEventProductListBean> mepls = mevent.getMarketingEventListBean().get(0).getMarketingEventProductListBean();
+					List<Product> products = new ArrayList<Product>();
+					for(int i=0;i<mepls.size();i++) {
+						products.add(productService.findById(mepls.get(i).getProductid()));
+					}
+					Map<Integer, Integer> productdcps = marketingEventService.productdcp(products);
+					m.addAttribute("mevent", mevent);
+					m.addAttribute("productdcps", productdcps);
+					return "mevent/edm";
+				}
+			}
 	}
 }
